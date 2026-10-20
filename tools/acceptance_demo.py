@@ -17,7 +17,6 @@ import sqlite3
 import subprocess
 import sys
 import threading
-import unicodedata
 import uuid
 import webbrowser
 from datetime import datetime, timezone
@@ -27,6 +26,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
 from ssr_collector_peak.primitives import ContractError, canonical, digest, private_output
+from .real_content import browse
 
 COLLECTOR = Path(__file__).resolve().parents[1]
 
@@ -56,7 +56,7 @@ def worktree_status(repo: Path) -> str:
     return result.stdout.strip()
 
 
-def read_database(path: Path, *, stage: bool = False, formal: bool = False, query: str = '') -> dict[str, Any]:
+def read_database(path: Path, *, stage: bool = False, formal: bool = False, query: str = '', category: str = 'all', page: int = 1, page_size: int = 12) -> dict[str, Any]:
     """Every request reads current SQLite rows. Missing data never gets a demo substitute."""
     need(path.is_file(), '指定的資料庫不存在')
     db = sqlite3.connect(path.resolve().as_uri() + '?mode=ro', uri=True)
@@ -78,19 +78,10 @@ def read_database(path: Path, *, stage: bool = False, formal: bool = False, quer
         current_states = dict(db.execute('SELECT r.status,count(*) FROM entries e JOIN entry_revisions r ON e.current_revision=r.revision_id GROUP BY r.status'))
         reviewed = db.execute('SELECT count(*) FROM entry_revisions WHERE review_json IS NOT NULL OR published_at IS NOT NULL').fetchone()[0]
         if formal:
-            needle = unicodedata.normalize('NFKC', query).casefold().strip()
-            samples = []
-            for row in db.execute('SELECT e.entry_id,r.status,r.revision_id,r.payload_json FROM entries e JOIN entry_revisions r ON e.current_revision=r.revision_id ORDER BY e.entry_id'):
-                payload = json.loads(row['payload_json'])
-                searchable = canonical([payload.get(k, '') for k in ['name_en', 'name_zh', 'aliases', 'summary_zh']])
-                if not needle or needle in unicodedata.normalize('NFKC', searchable).casefold():
-                    samples.append({'entry_id': row['entry_id'], 'revision_id': row['revision_id'], 'status': row['status'],
-                                    **{k: payload.get(k) for k in ['name_en', 'name_zh', 'aliases', 'summary_zh']}})
-                if len(samples) == 10:
-                    break
+            content = browse(db, query, category, page, page_size)
             return {'role': '既有正式資料庫（唯讀待審預覽，並非正式發布查詢）', 'counts': counts, 'states': states,
-                    'current_states': current_states, 'reviewed_or_published': reviewed, 'samples': samples,
-                    'query': query, 'readonly': True, 'sha256': file_hash(path)}
+                    'current_states': current_states, 'reviewed_or_published': reviewed, **content,
+                    'readonly': True, 'sha256': file_hash(path)}
         docs = [dict(r) for r in db.execute('SELECT snapshot_id,source_id,fetched_at,raw,raw_sha256,body,body_sha256,metadata_json FROM snapshots ORDER BY fetched_at')]
         for doc in docs:
             doc['metadata'] = json.loads(doc.pop('metadata_json'))
@@ -240,10 +231,10 @@ class AcceptanceRun:
             self.write_json('failure', 'failure.private.json', {'error': str(error), 'commits': self.commits})
             raise
 
-    def state(self, query: str = '') -> dict[str, Any]:
+    def state(self, query: str = '', *, category: str = 'all', page: int = 1, page_size: int = 12) -> dict[str, Any]:
         archive = read_database(self.archive / 'knowledge.sqlite3')
         stage = read_database(self.stage / 'collector-stage.sqlite3', stage=True)
-        formal = read_database(self.formal, formal=True, query=query) if self.formal else None
+        formal = read_database(self.formal, formal=True, query=query, category=category, page=page, page_size=page_size) if self.formal else None
         snapshots = {doc['snapshot_id']: doc for doc in archive['documents']}
         receipts = {row['bundle_id'] for row in archive['receipts']}
         source_heads = {row['latest_snapshot'] for row in archive['sources']}
@@ -293,9 +284,12 @@ def handler_for(run: AcceptanceRun):
                 if target.path == '/':
                     self.reply(200, (COLLECTOR / 'tools' / 'acceptance.html').read_bytes(), 'text/html; charset=utf-8')
                 elif target.path == '/api/state':
-                    query = parse_qs(target.query).get('q', [''])[0]
+                    params = parse_qs(target.query)
+                    query = params.get('q', [''])[0]
                     need(len(query) <= 100, '查詢至多 100 字元')
-                    self.reply(200, json.dumps(run.state(query), ensure_ascii=False).encode('utf-8'))
+                    options = {k:params[k][0] for k in ['category'] if k in params}
+                    options.update({k:int(params[k][0]) for k in ['page','page_size'] if k in params})
+                    self.reply(200, json.dumps(run.state(query, **options), ensure_ascii=False).encode('utf-8'))
                 elif target.path.startswith('/artifact/'):
                     key = target.path.removeprefix('/artifact/')
                     path = run.artifacts.get(key)

@@ -1,6 +1,10 @@
-# 親自驗收：合成檔案交接
+# 親自驗收：真實內容瀏覽與合成工程診斷
 
 此入口使用本機既有 uv／Python，開一個僅綁 127.0.0.1 的唯讀展示。沒有雲端、模型、新安裝、排程或開機自動啟動。它不是網站蒐集器，不取得任何真站。
+
+首頁以既有正式 DB 的內容為主，直接顯示數值、區域、徽章條件、引用來源和缺失。輸入「飛機餐」核對已保存欄位；輸入「成就」按遊戲徽章分類列逐項條件，每頁 12 項，可前後翻頁。名稱／別名／內容文字也可搜尋。制度概述不充當逐項清單，來源依實際紀錄區分 Wiki 網站與本機官方遊戲文字。
+
+Hash、revision、測試 exit code、虛構輸入、資料包和預期 no_data 查詢收在「合成測試與工程診斷」展開區。工程檢查通過只代表檔案傳遞／隔離符合預期，**不代表真實內容完整**。詳細頁未保存就顯示未保存；不以原站連結冒充已取得正文。
 
 ## 啟動與停止
 
@@ -25,14 +29,21 @@ uv --offline run --no-sync python -m tools.acceptance_demo --knowledge-repo C:\p
 uv --offline run --no-sync python -m tools.acceptance_demo --knowledge-repo C:\path\ssr-knowledge --data-dir C:\private\peak-acceptance --check-only
 ```
 
-## 看什麼，如何判讀
+## 真實內容先看什麼
+
+1. 搜尋名稱，直接看已保存的具體值；n/a、0、未記載保持不同，不推定缺失效果。
+2. 查看出現區域、官方英繁條件、現有用途／攻略及逐項缺欄。來源的適用版本未知時不外推。
+3. 看來源行，再展開「精確來源與引用」，核對頁面網址、取得方式、表格行號或官方文字 key。Steam 商店僅能是遊戲歸屬連結，不能替代本機資源的證據定位。
+4. 用「成就」或成就／徽章分類查看逐項條件並翻頁；制度概述仍按其實際來源保留，不混作一個徽章。
+
+## 次要合成工程診斷的判讀
 
 1. **來源計畫與合成輸入**：展開中央來源設定，核對 allowed／unknown、allow_fetch=false。輸入「Lunar Rope（月亮繩，別名月繩）」明確為虛構，SOURCE_COMMAND 只作文字保存。
 2. **collector 資料包**：查看第一版、更新版與拒收測試包。原文 base64、正文、雜湊、時間及 acquisition_method=synthetic_fixture 可對照；http_requests=0，不宣稱 Chrome 匯出。
 3. **保存端測試 DB**：每次刷新均直接 SELECT SQLite。應有 2 個 snapshot、2 個 receipt；collector 有 2 份文件、3 次觀測。第一版保留歷史，latest 指向第二版。展開正文應看到原始／更新的合成文本。
 4. **拒收與去重**：完整 CLI trace 記錄預設 validated_only、--apply saved、重匯 unchanged、更新新 ID、舊包重放，以及夾帶 policy 被拒的 exit 1。拒收前後 DB bytes 相同；偽造 bundle_id 不在 receipt。
 5. **正式查詢隔離**：月、月亮繩、Lunar Rope、月繩、SOURCE_COMMAND 的獨立 CLI 正式查詢全部 no_data。原因是本次只保存來源文件，entries／entry_revisions 為 0，沒有自動整理、批准或發布。
-6. **既有正式 DB**：金色區域僅為待審預覽，顯示 DB 實際筆數、狀態、SHA 與最多 10 筆現存摘要。可輸入名稱／別名查找；不套用成正式發布查詢，也沒有寫入按鈕。未指定正式 DB 時明確顯示未載入。
+6. **既有正式 DB**：首頁每次重新唯讀查詢內容，分類分頁，顯示實際欄位與來源；不套用成正式發布查詢，也沒有寫入按鈕。未指定正式 DB 時明確顯示未載入。
 7. **同版證據**：查看兩邊獨立測試 log、結束碼與測試時 commit；同時比對目前 commit 與工作樹。只有兩邊版本相同且工作樹乾淨才顯示版本一致。程式改動後，停止並重新啟動驗收以取得新證據。
 
 展示頁不提供 DB 寫入、來源核准、人工審核或發布 API；Host 限制在 localhost／127.0.0.1，檔案讀取只接受本次 artifact allowlist。來源文字以文字節點顯示，不能變成命令或 HTML 腳本。
