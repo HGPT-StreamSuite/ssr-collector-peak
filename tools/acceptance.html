@@ -37,7 +37,7 @@ function card(item){
  item.guide_claims.forEach(c=>{const div=el('div',undefined,'guide');div.append(el('h3',c.title+refs(c.source_refs)),el('p',c.text));box.append(div);});
  if(item.sources.length){const first=item.sources[0],line=el('div',undefined,'source-line');line.append(el('span','已保存來源：'+(first.role?first.role+' · ':'')));line.append(first.href?external((first.site||first.title)+' ['+first.index+']',first.href):el('span',first.title+' ['+first.index+']'));line.append(el('span',' · '+first.acquisition));box.append(line);}
  if(item.gaps.length){const gap=el(item.condition_zh?'details':'div',undefined,item.condition_zh?'':'missing');if(item.condition_zh)gap.append(el('summary','尚缺的資料'));else gap.append(el('strong','尚缺資料'));list(gap,item.gaps);box.append(gap);}
- if(item.detail_page){const p=el('p',undefined,'small-note');p.append(el('span',item.detail_page.saved?'已保存詳細頁：':'詳細頁尚未保存：'),external('原站連結',item.detail_page.href));box.append(p);}
+ if(item.detail_page){const p=el('p',undefined,'small-note');p.append(el('span',item.detail_page.saved?'已保存詳細頁：':'對照原站：'),external('詳細頁連結',item.detail_page.href));box.append(p);}
  if(item.overview)box.append(el('p','這是制度概述；逐項條件請切換「成就／徽章」分類。','small-note muted'));
  const sources=el('details');sources.append(el('summary','精確來源與引用（'+item.sources.length+'）'));item.sources.forEach(s=>sources.append(sourceBlock(s)));box.append(sources);
  return box;
