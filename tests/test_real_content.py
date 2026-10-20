@@ -69,7 +69,7 @@ class RealContentTests(unittest.TestCase):
         self.assertEqual(stats['weight']['display'],'0')
         self.assertEqual(stats['hunger']['display'],'−7')
         self.assertIsNone(stats['poison']['value'])
-        self.assertIn('n/a',stats['poison']['display'])
+        self.assertEqual(stats['poison']['display'],'n/a')
         self.assertEqual(data['biomes'],['Any'])
         self.assertEqual(data['summary_zh'],'')
         self.assertFalse(data['detail_page']['saved'])

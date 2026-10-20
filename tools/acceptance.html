@@ -31,8 +31,8 @@ function card(item){
  const known=new Set([item.name_en,item.name_zh].map(v=>(v||'').toLocaleLowerCase())),aliases=[...new Set(item.aliases||[])].filter(a=>!known.has(a.toLocaleLowerCase()));if(aliases.length)box.append(el('p','別名：'+aliases.join('、'),'small-note muted'));
  if(item.condition_zh){box.append(el('h3','官方顯示條件'+refs(item.condition_refs)),el('p',item.condition_zh,'condition'));if(item.condition_en)box.append(el('p',item.condition_en,'small-note muted'));}
  if(item.summary_zh&&item.summary_zh!==item.condition_zh)box.append(el('p',item.summary_zh));
- if(item.statistics.length){box.append(el('h3','效果與數值（已保存表格）'));const dl=el('dl',undefined,'stats');item.statistics.forEach(s=>{const pair=el('div',undefined,'stat');pair.append(el('dt',s.label),el('dd',s.display));dl.append(pair);});box.append(dl);}
- if(item.biomes.length){box.append(el('h3','出現區域（原表）'),el('p',item.biomes.map(v=>v==='Any'?'Any（任意生態區）':v).join('、')));}
+ if(item.statistics.length){box.append(el('h3','效果與數值'));const dl=el('dl',undefined,'stats');item.statistics.forEach(s=>{const pair=el('div',undefined,'stat');pair.append(el('dt',s.label),el('dd',s.display));dl.append(pair);});box.append(dl);}
+ if(item.biomes.length){box.append(el('h3','出現區域'),el('p',item.biomes.map(v=>v==='Any'?'Any（任意生態區）':v).join('、')));}
  item.sections.forEach(section=>{box.append(el('h3',section.title+refs(section.source_refs)));list(box,section.lines);});
  item.guide_claims.forEach(c=>{const div=el('div',undefined,'guide');div.append(el('h3',c.title+refs(c.source_refs)),el('p',c.text));box.append(div);});
  if(item.sources.length){const first=item.sources[0],line=el('div',undefined,'source-line');line.append(el('span','已保存來源：'+(first.role?first.role+' · ':'')));line.append(first.href?external((first.site||first.title)+' ['+first.index+']',first.href):el('span',first.title+' ['+first.index+']'));line.append(el('span',' · '+first.acquisition));box.append(line);}

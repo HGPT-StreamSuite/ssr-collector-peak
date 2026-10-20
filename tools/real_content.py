@@ -89,7 +89,7 @@ def present(db: sqlite3.Connection, row: sqlite3.Row, payload: dict[str, Any]) -
     for key, value in item.get('statistics', {}).items():
         state = value.get('state')
         actual = value.get('value')
-        display = 'n/a（來源原值）' if state == 'source_na' else str(actual).replace('-', '−') if actual is not None else '未記載'
+        display = 'n/a' if state == 'source_na' else str(actual).replace('-', '−') if actual is not None else '未記載'
         stats.append({'key':key,'label':STAT_LABELS.get(key,key),'value':actual,'display':display,
                       'source_raw':value.get('raw'),'state':state,'source_refs':[1] if payload.get('citations') else []})
     sections = []
