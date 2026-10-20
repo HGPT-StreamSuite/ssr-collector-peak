@@ -48,6 +48,12 @@ class RealContentTests(unittest.TestCase):
 
     def tearDown(self): self.temp.cleanup()
 
+    def update_item(self):
+        db=sqlite3.connect(self.path)
+        db.execute('UPDATE entry_revisions SET payload_json=? WHERE entry_id=?',
+                   (json.dumps(self.item,ensure_ascii=False),self.item['entry_id']))
+        db.commit();db.close()
+
     def test_category_keyword_returns_each_badge_and_all_pages_without_overview(self):
         seen=[]
         for page in range(1,7):
@@ -72,6 +78,7 @@ class RealContentTests(unittest.TestCase):
         self.assertEqual(stats['poison']['display'],'n/a')
         self.assertEqual(data['biomes'],['Any'])
         self.assertEqual(data['summary_zh'],'')
+        self.assertEqual(read_database(self.path,formal=True,query='synthetic-flask')['samples'][0]['entry_id'],'synthetic-flask')
         self.assertFalse(data['detail_page']['saved'])
         self.assertIn('具體取得位置／方式：原表未記載。',data['gaps'])
         source=data['sources'][0]
@@ -99,3 +106,42 @@ class RealContentTests(unittest.TestCase):
             with self.assertRaises(ContractError): read_database(self.path,formal=True,**options)
         last=read_database(self.path,formal=True,query='成就',page=999)
         self.assertEqual((last['page'],last['range_start'],last['range_end']),(6,61,64))
+
+    def test_editorial_clauses_move_to_review_without_hiding_game_conditions(self):
+        self.item['summary_zh']='合成瓶可恢復體力。本文未記錄持續時間。'
+        self.item['item_details']['notes_zh']=['尚未煮熟時會造成中毒；不能用於昏迷隊友。尚未進行遊戲實測。']
+        self.item['guide_details']={'claims':[{'topic':'steps','source_class':'wiki',
+            'text_zh':'手持瓶子使用。完整段落仍待核對。','evidence':[]}],
+            'gaps':[{'topic':'reward','reason':'尚缺合成獎勵對照。'}]}
+        self.update_item()
+        before=file_hash(self.path)
+        data=read_database(self.path,formal=True,query='小瓶')['samples'][0]
+        self.assertEqual(data['summary_zh'],'合成瓶可恢復體力。')
+        self.assertIn('本文未記錄持續時間。',[v['text'] for v in data['review_notes']])
+        self.assertEqual(data['sections'][0]['lines'],['尚未煮熟時會造成中毒；不能用於昏迷隊友。'])
+        self.assertEqual(data['guide_claims'][0]['text'],'手持瓶子使用。')
+        self.assertIn('完整段落仍待核對。',[v['text'] for v in data['review_notes']])
+        self.assertIn('本文未記錄持續時間。',data['saved_summary'])
+        self.assertEqual(file_hash(self.path),before)
+
+    def test_translated_notes_appear_once_and_original_notes_remain_available(self):
+        self.item['summary_zh']='可攜帶兩件合成物品。'
+        self.item['item_details']['notes_zh']=['可攜帶兩件合成物品。']
+        self.item['item_details']['notes_en']=['Carries two fictional objects.']
+        self.update_item()
+        data=read_database(self.path,formal=True,query='小瓶')['samples'][0]
+        self.assertEqual(data['summary_zh'],'')
+        self.assertEqual(data['sections'],[{'title':'用途／備註','lines':['可攜帶兩件合成物品。'],'source_refs':[1]}])
+        self.assertEqual(data['original_notes'],['Carries two fictional objects.'])
+        self.assertEqual(data['saved_summary'],'可攜帶兩件合成物品。')
+
+    def test_missing_field_labels_follow_saved_fields_and_do_not_fill_unknowns(self):
+        first=read_database(self.path,formal=True,query='小瓶')['samples'][0]
+        self.assertEqual({f['topic'] for f in first['missing_fields']},{'acquisition','usage','cooking'})
+        self.item['item_details'].update({'acquisition_en':['Found at a fictional camp.'],
+            'cooking_en':['No additional effect in this synthetic fixture.'],'notes_en':['Hold to use.']})
+        self.update_item()
+        saved=read_database(self.path,formal=True,query='小瓶')['samples'][0]
+        self.assertEqual(saved['missing_fields'],[])
+        self.assertFalse(saved['detail_page']['saved'])
+        self.assertIn('個別詳細頁正文尚未保存。',saved['gaps'])

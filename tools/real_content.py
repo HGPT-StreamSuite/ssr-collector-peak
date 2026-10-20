@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import sqlite3
 import unicodedata
 from typing import Any
@@ -25,6 +26,24 @@ ACQUISITIONS = {'user_provided_text':'使用者提供的頁面文字（已保存
                 'web_search_excerpt':'搜尋索引摘錄（已保存，並非詳細頁全文）',
                 'local_name_reference':'名稱參考資料（已保存）','http_collection':'頁面快照（已保存）',
                 'approved_local_file':'獲准的本機檔案（已保存）'}
+REVIEW_CLAUSE = re.compile(
+    r'^(?:本稿|本文|本批|這裡|這只記錄|這不是完整掉落表|原表未附用途備註|已保存數值與出現區域|中文為暫譯)'
+    r'|(?:尚待|仍待|尚未|仍需)(?:完整來源|獨立來源|進行遊戲)?(?:核對|實測)'
+    r'|(?:未取得|尚缺|尚無).*(?:資料|來源|依據|段落|清單|公式)'
+    r'|^未(?:確認目前版本|核對官方|收完整|收謎題|記錄傷害)'
+    r'|不是已核對的遊戲 build|來源含約略距離，但本稿|不在本稿範圍'
+    r'|^(?:細節|各道具效果及持續時間).*(?:核對|獨立來源)|^未取得當日地圖'
+)
+
+
+def content_and_review(text: str) -> tuple[str, list[str]]:
+    """Separate editorial clauses for display; the stored source text is unchanged."""
+    clauses = [s.strip() for s in re.split(r'(?<=[。；！？])\s*', text) if s.strip()]
+    notes = [s for s in clauses if REVIEW_CLAUSE.search(s)]
+    content = ''.join(s for s in clauses if not REVIEW_CLAUSE.search(s))
+    if notes and content.endswith('；'):
+        content = content[:-1]+'。'
+    return content, notes
 
 
 def normalized(value: str) -> str:
@@ -79,12 +98,9 @@ def present(db: sqlite3.Connection, row: sqlite3.Row, payload: dict[str, Any]) -
     item = payload.get('item_details', {})
     badge = payload.get('badge_details', {})
     guide = payload.get('guide_details', {})
-    summary = payload.get('summary_zh','')
-    if summary == '原表未附用途備註；已保存數值與出現區域。':
-        summary = ''
+    summary, summary_notes = content_and_review(payload.get('summary_zh',''))
+    review_notes = [{'field':'摘要','text':s} for s in summary_notes]
     overview = payload.get('category') == 'achievement' and badge.get('kind') != 'game_badge'
-    if overview:
-        summary = summary.split('本稿')[0].strip()
     stats = []
     for key, value in item.get('statistics', {}).items():
         state = value.get('state')
@@ -93,19 +109,42 @@ def present(db: sqlite3.Connection, row: sqlite3.Row, payload: dict[str, Any]) -
         stats.append({'key':key,'label':STAT_LABELS.get(key,key),'value':actual,'display':display,
                       'source_raw':value.get('raw'),'state':state,'source_refs':[1] if payload.get('citations') else []})
     sections = []
+    original_notes = strings(item.get('notes_en'))
     for key, label in [('notes_zh','用途／備註'),('notes_en','原文備註'),('acquisition_en','取得方式'),
                        ('locations_en','具體位置'),('cooking_en','烹調'),('restrictions_en','限制')]:
-        values = strings(item.get(key))
+        if key == 'notes_en' and strings(item.get('notes_zh')):
+            continue
+        values = []
+        for text in strings(item.get(key)):
+            content, notes = content_and_review(text)
+            if content:values.append(content)
+            review_notes.extend({'field':label,'text':s} for s in notes)
         if values:
             sections.append({'title':label,'lines':values,'source_refs':[1]})
+    note_sentences = {normalized(s).rstrip('。；') for section in sections for line in section['lines']
+                      for s in re.split(r'(?<=[。；！？])\s*',line) if s.strip()}
+    summary_sentences = [normalized(s).rstrip('。；') for s in re.split(r'(?<=[。；！？])\s*',summary) if s.strip()]
+    if item and summary_sentences and all(s in note_sentences for s in summary_sentences):
+        summary = ''
     gaps = [g['reason'] for g in guide.get('gaps',[]) if isinstance(g,dict) and g.get('reason')]
+    missing_fields = []
+    def missing(topic: str, label: str) -> None:
+        if not any(f['topic']==topic for f in missing_fields):missing_fields.append({'topic':topic,'label':label,'state':'not_saved'})
+    if summary_notes and not item and not badge:
+        missing('details','細節（待補）')
+    for gap in guide.get('gaps',[]):
+        if isinstance(gap,dict) and gap.get('reason'):
+            missing(gap.get('topic','other'),TOPICS.get(gap.get('topic'),'補充資料')+'（未齊）')
     if item:
         if not item.get('locations_en') and not item.get('acquisition_en'):
             gaps.append('具體取得位置／方式：原表未記載。')
+            missing('acquisition','取得欄位')
         if not item.get('notes_en') and not item.get('notes_zh'):
             gaps.append('詳細使用方法：原表未附備註。')
+            missing('usage','使用方式')
         if not item.get('cooking_en'):
             gaps.append('烹調效果：原表未記載。')
+            missing('cooking','烹調欄位')
     detail = payload.get('detail_page', {})
     sources = saved_sources(db,payload)
     detail_href = safe_href(detail.get('url'))
@@ -114,10 +153,16 @@ def present(db: sqlite3.Connection, row: sqlite3.Row, payload: dict[str, Any]) -
         gaps.append('個別詳細頁正文尚未保存。')
     if badge and not guide:
         gaps.append('詳細攻略、獎勵與實際解鎖邏輯尚未保存。')
+        missing('steps','攻略步驟')
+        missing('reward','獎勵')
     claims = []
     for claim in guide.get('claims', []):
-        claims.append({'title':TOPICS.get(claim.get('topic'),claim.get('topic','補充')),
-            'text':claim.get('text_zh',''),'source_class':claim.get('source_class'),
+        title=TOPICS.get(claim.get('topic'),claim.get('topic','補充'))
+        content, notes = content_and_review(claim.get('text_zh',''))
+        review_notes.extend({'field':title,'text':s} for s in notes)
+        if not content:continue
+        claims.append({'title':title,
+            'text':content,'source_class':claim.get('source_class'),
             'source_refs':sorted({e['citation']+1 for e in claim.get('evidence',[]) if isinstance(e.get('citation'),int)})})
     for source in sources:
         source['role'] = ('名稱／官方條件' if badge else '名稱') if source.get('acquisition_kind') == 'installed_game_text' else '數值／表格備註' if item and source['index'] == 1 else '攻略補充' if guide else '內容'
@@ -128,6 +173,8 @@ def present(db: sqlite3.Connection, row: sqlite3.Row, payload: dict[str, Any]) -
         'sections':sections,'condition_zh':badge.get('condition_zh'),'condition_en':badge.get('condition_en'),
         'condition_refs':[badge[k]+1 for k in ['english_citation','traditional_citation'] if isinstance(badge.get(k),int)],
         'guide_claims':claims,'gaps':list(dict.fromkeys(gaps)), 'sources':sources,
+        'missing_fields':missing_fields,'review_notes':review_notes,'original_notes':original_notes,
+        'saved_summary':payload.get('summary_zh',''),
         'detail_page':{'href':detail_href,'saved':detail_saved} if detail_href else None,
         'game_version':payload.get('game_version','unknown')}
 
@@ -152,7 +199,7 @@ def browse(db: sqlite3.Connection, query: str = '', category: str = 'all', page:
             continue
         if category == 'achievement' and payload.get('badge_details',{}).get('kind') != 'game_badge':
             continue
-        searchable = [payload.get(key,'') for key in ['name_en','name_zh','aliases','summary_zh']]
+        searchable = [row['entry_id'], *[payload.get(key,'') for key in ['name_en','name_zh','aliases','summary_zh']]]
         searchable += [payload.get('item_details',{}),payload.get('badge_details',{}),
                        [c.get('text_zh','') for c in payload.get('guide_details',{}).get('claims',[])]]
         if needle and needle not in normalized(json.dumps(searchable,ensure_ascii=False)):
