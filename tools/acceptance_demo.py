@@ -12,6 +12,7 @@ import json
 import os
 import re
 import shutil
+import socket
 import sqlite3
 import subprocess
 import sys
@@ -315,6 +316,15 @@ def handler_for(run: AcceptanceRun):
 
 def reuse_existing(args: argparse.Namespace) -> bool:
     """A second click opens the same verified viewer without replaying or killing it."""
+    probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        probe.bind(('127.0.0.1', args.port))
+        return False
+    except OSError as error:
+        if error.errno not in {48, 98, 10048} and getattr(error, 'winerror', None) != 10048:
+            raise ContractError('無法綁定本機驗收 port：' + str(error)) from error
+    finally:
+        probe.close()
     client = http.client.HTTPConnection('127.0.0.1', args.port, timeout=2)
     try:
         client.request('GET', '/api/state')
@@ -324,7 +334,7 @@ def reuse_existing(args: argparse.Namespace) -> bool:
         return False
     except (OSError, http.client.HTTPException) as error:
         client.close()
-        raise ContractError('無法核對既有驗收 port，請改用 --port') from error
+        raise ContractError('無法核對既有驗收 port，請改用 --port：' + str(error)) from error
     try:
         need(response.status == 200, 'port 已被其他服務使用，請停止原服務或改用 --port')
         data = json.loads(response.read(6_000_001))

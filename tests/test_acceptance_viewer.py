@@ -2,6 +2,7 @@
 import http.client
 import json
 import sqlite3
+import socket
 import tempfile
 import threading
 import unittest
@@ -10,7 +11,7 @@ from types import SimpleNamespace
 from unittest.mock import patch
 from http.server import ThreadingHTTPServer
 
-from tools.acceptance_demo import file_hash, handler_for, read_database
+from tools.acceptance_demo import file_hash, handler_for, read_database, reuse_existing
 from ssr_collector_peak.primitives import ContractError, digest
 
 
@@ -92,6 +93,14 @@ class AcceptanceViewerTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             read_database(absent, formal=True)
         self.assertFalse(absent.exists())
+
+    def test_cold_start_checks_bind_without_requesting_a_closed_port(self):
+        probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        probe.bind(('127.0.0.1', 0))
+        port = probe.getsockname()[1]
+        probe.close()
+        with patch('tools.acceptance_demo.http.client.HTTPConnection', side_effect=AssertionError('cold start must not request HTTP')):
+            self.assertFalse(reuse_existing(SimpleNamespace(port=port)))
 
     def request(self, server, method, path, host=None):
         client = http.client.HTTPConnection('127.0.0.1', server.server_port)
