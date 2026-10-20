@@ -14,6 +14,8 @@ Start-Acceptance.cmd "C:\path\ssr-knowledge" "C:\private\peak-acceptance" "C:\pr
 
 首頁優先呈現**既有真實內容**：名稱／別名、效果數值、出現區域、逐項徽章條件、精確來源及缺欄。搜尋「成就」依類別列出已保存的遊戲徽章並分頁；來源逐筆區分 PEAK Wiki、其他 Wiki 與官方本機資源。Hash、revision 與合成工程 trace 收在次要展開區，工程通過不當成內容完整性通過。
 
+已有私有完整性稽核報告時，可用第四個參數指定 Git checkout 外的報告目錄（CLI 為 `--audit-dir`）。固定檔名為 `report.html`、`gaps.csv`，不隨 repo 提供真實報告或來源文本。首頁會在兩個檔案皆可讀時顯示報告連結；`http://127.0.0.1:8766/audit` 顯示 HTML，`/audit/gaps.csv` 下載 CSV。路由只允許這兩個檔案，不列目錄、不建立缺失檔案、不讀取目錄外的連結目標，也不寫入或審核正式知識；既有 loopback、Host 檢查與唯讀邊界保留。報告是操作者另外產生的查證結果，提供入口不代表內容已通過人工審核。
+
 `tools/acceptance_demo.py` 是操作者明確啟動的驗收工具，以子程序跑兩邊 CLI；生產核心沒有這項依賴。第一次啟動若缺既有 `.venv`、uv、權限或 port 被占用會報錯，不自動安裝、不用示範資料掩蓋失敗。重播、停止和實際觀測方式見 [親自驗收](docs/acceptance.md)。本版真站至入庫仍未通過，本輪真實網站原文新增 0。
 
 使用者目前選定的網站取得方式是 **computer use／本機 Chrome**。本版的 `intake-file` 接收已獲准的本機檔案，**不會開啟 Chrome，也不宣稱檔案由 Chrome 抓取**。瀏覽器可讀、robots 允許或顯示授權文字，均不能單獨推定另有外部批次蒐集權限；明確禁止的網站不得換用瀏覽器繞過。

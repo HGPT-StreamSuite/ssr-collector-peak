@@ -134,3 +134,52 @@ class AcceptanceViewerTests(unittest.TestCase):
             server.server_close()
             thread.join()
         self.assertEqual(file_hash(self.db), before)
+
+    def test_private_audit_routes_serve_only_selected_files_without_writes(self):
+        report = self.root / 'report.html'
+        report.write_text('<!doctype html><title>Synthetic audit</title>', encoding='utf-8')
+        csv = self.root / 'gaps.csv'
+        csv.write_text('checkpoint,status\nfictional,unknown\n', encoding='utf-8-sig')
+        secret = self.root / 'private.json'
+        secret.write_text('SYNTHETIC_NOT_ALLOWLISTED', encoding='utf-8')
+        run = SimpleNamespace(audit_dir=self.root, artifacts={})
+        server = ThreadingHTTPServer(('127.0.0.1', 0), handler_for(run))
+        thread = threading.Thread(target=server.serve_forever)
+        thread.start()
+        before = {p.name: file_hash(p) for p in self.root.iterdir() if p.is_file()}
+        try:
+            status, data, headers = self.request(server, 'GET', '/audit')
+            self.assertEqual((status, data), (200, report.read_bytes()))
+            self.assertEqual(headers['Content-Type'], 'text/html; charset=utf-8')
+            self.assertEqual(headers['Cache-Control'], 'no-store')
+            self.assertIn("frame-ancestors 'none'", headers['Content-Security-Policy'])
+            self.assertEqual(self.request(server, 'GET', '/audit/')[1], report.read_bytes())
+            status, data, headers = self.request(server, 'GET', '/audit/gaps.csv')
+            self.assertEqual((status, data), (200, csv.read_bytes()))
+            self.assertEqual(headers['Content-Type'], 'text/csv; charset=utf-8')
+            self.assertEqual(headers['Content-Disposition'], 'attachment; filename="gaps.csv"')
+            for path in ['/audit/private.json', '/audit/../knowledge.sqlite3', '/audit/%2e%2e/private.json', '/audit/report.html']:
+                self.assertEqual(self.request(server, 'GET', path)[0], 404)
+            self.assertEqual(self.request(server, 'GET', '/audit', 'evil.example')[0], 403)
+            self.assertEqual(self.request(server, 'POST', '/audit')[0], 405)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+        self.assertEqual({p.name: file_hash(p) for p in self.root.iterdir() if p.is_file()}, before)
+
+    def test_audit_missing_or_not_configured_never_gets_substitute_content(self):
+        run = SimpleNamespace(audit_dir=self.root / 'missing-report-directory', artifacts={})
+        server = ThreadingHTTPServer(('127.0.0.1', 0), handler_for(run))
+        thread = threading.Thread(target=server.serve_forever)
+        thread.start()
+        try:
+            self.assertEqual(self.request(server, 'GET', '/audit')[0], 404)
+            self.assertEqual(self.request(server, 'GET', '/audit/gaps.csv')[0], 404)
+            del run.audit_dir
+            self.assertEqual(self.request(server, 'GET', '/audit')[0], 404)
+            self.assertFalse((self.root / 'missing-report-directory').exists())
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()

@@ -5,6 +5,7 @@
 </style></head><body><main>
 <header><div><div class="eyebrow">PEAK · SAVED KNOWLEDGE</div><h1>已保存的遊戲資料</h1><p id="catalogStats" class="muted">正在讀取資料庫…</p></div><button id="refresh">重新讀取內容</button></header>
 <p class="small-note muted">唯讀內容核對：依現存來源顯示具體欄位與缺漏，尚未人工發布。</p>
+<p id="auditLink" hidden><a href="/audit">查看完整性稽核報告與 CSV</a></p>
 <form id="search" class="toolbar"><input id="query" aria-label="搜尋已保存內容" placeholder="搜尋名稱或別名，例如「飛機餐」「成就」「Ancient Idol」"><button class="primary" type="submit">搜尋</button><button type="button" id="clear">清除</button></form>
 <nav id="categories" aria-label="資料分類"></nav><div id="error" hidden class="error"></div>
 <div id="pager"><div><strong id="resultsLabel"></strong><p id="categoryNote" class="small-note muted"></p></div><div class="toolbar"><button id="previous">上一頁</button><span id="pageLabel" class="muted"></span><button id="next">下一頁</button></div></div>
@@ -46,6 +47,7 @@ function diagnostics(data){$('diagnosticStatus').textContent='合成檔案流程
 async function load(){
  $('error').hidden=true;
  try{const params=new URLSearchParams({q:state.query,category:state.category,page:String(state.page)}),response=await fetch('/api/state?'+params),data=await response.json();if(!response.ok)throw Error(data.error||'無法讀取資料');const f=data.formal;
+ $('auditLink').hidden=!data.audit?.available;
  if(!f){$('catalogStats').textContent='未指定正式資料庫。';reset('cards').append(el('p','沒有用合成資料代替內容。','empty'));return;}
  state.page=f.page;state.category=f.category;history.replaceState(null,'','?'+new URLSearchParams({q:state.query,category:state.category,page:String(state.page)}));
  $('catalogStats').textContent='已保存 '+f.counts.entries+' 條內容 · '+f.category_counts.item+' 項道具 · '+f.category_counts.achievement+' 項遊戲徽章';

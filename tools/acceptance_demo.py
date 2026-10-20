@@ -29,6 +29,18 @@ from ssr_collector_peak.primitives import ContractError, canonical, digest, priv
 from .real_content import browse
 
 COLLECTOR = Path(__file__).resolve().parents[1]
+AUDIT_DOCUMENTS = {'/audit': ('report.html', 'text/html; charset=utf-8'),
+                   '/audit/': ('report.html', 'text/html; charset=utf-8'),
+                   '/audit/gaps.csv': ('gaps.csv', 'text/csv; charset=utf-8')}
+
+
+def audit_document(root: Path | None, name: str) -> Path | None:
+    """Only two explicitly selected private files can be served; no directory browsing."""
+    if root is None or name not in {'report.html', 'gaps.csv'}:
+        return None
+    base = root.resolve()
+    path = (base / name).resolve()
+    return path if path.parent == base and path.is_file() else None
 
 
 def file_hash(path: Path) -> str:
@@ -95,11 +107,14 @@ def read_database(path: Path, *, stage: bool = False, formal: bool = False, quer
 
 
 class AcceptanceRun:
-    def __init__(self, knowledge: Path, root: Path, formal: Path | None):
+    def __init__(self, knowledge: Path, root: Path, formal: Path | None, *, audit_dir: Path | None = None):
         self.knowledge = knowledge.resolve()
         need((self.knowledge / 'ssr_knowledge' / 'catalog_cli.py').is_file(), '請指定 ssr-knowledge checkout')
         need((self.knowledge / '.venv' / 'Scripts' / 'python.exe').is_file(), '缺少既有本機 .venv；本工具不建立或安裝環境')
         self.root = private_output(root)
+        self.audit_dir = private_output(audit_dir) if audit_dir is not None else None
+        if self.audit_dir is not None:
+            need(self.audit_dir.is_dir(), '指定的私有稽核報告目錄不存在；不會建立替代報告')
         self.formal = formal.resolve() if formal else None
         if self.formal:
             need(self.formal.is_file(), '指定的正式 DB 不存在；不會建立替代資料')
@@ -256,6 +271,9 @@ class AcceptanceRun:
                 'archive': archive, 'stage': stage, 'formal': formal,
                 'checks': [{'label': label, 'passed': bool(passed)} for label, passed in checks],
                 'result': self.result, 'trace': self.trace, 'artifacts': list(self.artifacts),
+                'audit': {'directory': str(self.audit_dir) if self.audit_dir else None,
+                          'available': all(audit_document(self.audit_dir, name) for name in ['report.html', 'gaps.csv']),
+                          'href': '/audit'},
                 'limits': '合成檔案交接已實跑；本輪真實網站原文入庫 0，Chrome 真站取得至入庫尚未驗收。'}
 
 
@@ -264,12 +282,14 @@ def handler_for(run: AcceptanceRun):
         def log_message(self, *_: Any) -> None:
             pass
 
-        def reply(self, status: int, data: bytes, content_type: str = 'application/json; charset=utf-8') -> None:
+        def reply(self, status: int, data: bytes, content_type: str = 'application/json; charset=utf-8', *, attachment: bool = False) -> None:
             self.send_response(status)
             self.send_header('Content-Type', content_type)
             self.send_header('Content-Length', str(len(data)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
+            if attachment:
+                self.send_header('Content-Disposition', 'attachment; filename="gaps.csv"')
             self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; object-src 'none'")
             self.end_headers()
             self.wfile.write(data)
@@ -283,6 +303,13 @@ def handler_for(run: AcceptanceRun):
             try:
                 if target.path == '/':
                     self.reply(200, (COLLECTOR / 'tools' / 'acceptance.html').read_bytes(), 'text/html; charset=utf-8')
+                elif target.path in AUDIT_DOCUMENTS:
+                    name, content_type = AUDIT_DOCUMENTS[target.path]
+                    path = audit_document(getattr(run, 'audit_dir', None), name)
+                    if path is None:
+                        self.reply(404, b'{"error":"audit document unavailable"}')
+                        return
+                    self.reply(200, path.read_bytes(), content_type, attachment=name == 'gaps.csv')
                 elif target.path == '/api/state':
                     params = parse_qs(target.query)
                     query = params.get('q', [''])[0]
@@ -341,6 +368,9 @@ def reuse_existing(args: argparse.Namespace) -> bool:
         wanted_hash = file_hash(Path(args.formal_db)) if args.formal_db else None
         actual_hash = data['formal']['sha256'] if data['formal'] else None
         need(wanted_hash == actual_hash, '正式 DB 選擇不同，請改用 --port')
+        audit_dir = getattr(args, 'audit_dir', None)
+        wanted_audit = str(private_output(audit_dir)) if audit_dir is not None else None
+        need(data.get('audit', {}).get('directory') == wanted_audit, '稽核報告目錄不同，請停止原服務後重新啟動')
         print('既有同版驗收仍可訪問：http://127.0.0.1:' + str(args.port) + '/', flush=True)
         if not args.no_browser:
             webbrowser.open('http://127.0.0.1:' + str(args.port) + '/')
@@ -358,6 +388,7 @@ def main() -> None:
     parser.add_argument('--knowledge-repo', type=Path, required=True)
     parser.add_argument('--data-dir', type=Path, required=True)
     parser.add_argument('--formal-db', default='')
+    parser.add_argument('--audit-dir', type=Path, help='既有 Git checkout 外的私有 report.html 與 gaps.csv 目錄；僅供唯讀展示')
     parser.add_argument('--port', type=int, default=8766)
     parser.add_argument('--no-browser', action='store_true')
     parser.add_argument('--check-only', action='store_true')
@@ -366,7 +397,7 @@ def main() -> None:
         need(1 <= args.port <= 65535, 'port 需為 1–65535')
         if not args.check_only and reuse_existing(args):
             return
-        run = AcceptanceRun(args.knowledge_repo, args.data_dir, Path(args.formal_db) if args.formal_db else None)
+        run = AcceptanceRun(args.knowledge_repo, args.data_dir, Path(args.formal_db) if args.formal_db else None, audit_dir=args.audit_dir)
         run.execute()
         print(json.dumps({'state': 'verified_synthetic_handoff', 'run': str(run.run), 'commits': run.commits,
                           'tests': run.tests, 'new_real_documents': 0}, ensure_ascii=False), flush=True)
