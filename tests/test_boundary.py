@@ -72,6 +72,15 @@ class BoundaryTests(unittest.TestCase):
         with StageLedger(self.root/'stage') as stage:
             self.assertEqual(stage.stats()['counts']['snapshots'],0)
 
+    def test_local_file_preserves_windows_crlf_bytes_and_body(self):
+        raw=b'Synthetic fictional Lunar Rope.\r\nOriginal Windows newlines must survive.\r\n'
+        self.file.write_bytes(raw)
+        with StageLedger(self.root/'stage') as stage:
+            result=intake_file(stage,self.source,str(self.file),'plain_text','synthetic_fixture')
+            snapshot=stage.snapshot(result['snapshot_id'],True)
+            self.assertEqual(snapshot['body'],raw.decode('utf-8'))
+            self.assertEqual(snapshot['raw_sha256'],digest(raw))
+
     def test_html_file_is_parsed_without_running_script_or_claiming_http(self):
         self.source['selector']={'tag':'main'}
         self.file.write_text('<title>Synthetic</title><main>Synthetic fictional Lunar Rope creates a fictional blue platform.<script>RUN_SOURCE_COMMAND</script></main>',encoding='utf-8')

@@ -21,6 +21,8 @@
 
 以上是在各自 repo 使用 `uv --offline run --no-sync python -m ssr_knowledge ...` 或 `python -m ssr_collector_peak ...`，不由任何一端啟動另一端。操作員或獨立驗收腳本傳遞檔案。
 
+可選的 `Start-Acceptance.cmd`／`tools.acceptance_demo` 是操作員明確啟動的驗收腳本，使用兩個獨立 CLI 程序傳檔，並提供唯讀展示；不在生產 collector 核心內呼叫保存端。具體操作見 [親自驗收](acceptance.md)。
+
 ## `ssr.collection.v1`
 
 根欄位恰為 `format`、`producer`、`source_ref`、`document`、`bundle_id`。producer 固定 `ssr-collector-peak/0.1.0`。

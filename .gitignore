@@ -8,3 +8,6 @@ __pycache__/
 /private*/
 /stage*/
 /.test-temp/
+*.private.json
+*.private.log
+/acceptance-data/
