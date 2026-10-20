@@ -1,0 +1,25 @@
+{
+  "source_id": "synthetic-export",
+  "url": "approved-file:synthetic-export",
+  "original_url": "https://example.test/authorized-export",
+  "source_type": "official",
+  "title": "Synthetic fixture only; not a real PEAK source or permission",
+  "language": "en",
+  "declared_version": "synthetic-v1",
+  "selector": {"tag": "main"},
+  "interval_seconds": 3,
+  "acquisition": {"kind": "approved_local_file"},
+  "policy": {
+    "allow_fetch": false,
+    "allow_import": true,
+    "reviewed_at": "2026-10-20T00:00:00+00:00",
+    "terms_url": "https://example.test/synthetic-only-terms",
+    "notes": "Synthetic test settings only. No real website authorization or HTTP request.",
+    "uses": {
+      "local_cache": {"status": "allowed", "basis": "Self-authored synthetic fixture only."},
+      "search_index": {"status": "allowed", "basis": "Self-authored synthetic fixture only."},
+      "ai_input": {"status": "unknown", "basis": "Not needed for this fixture handoff."},
+      "ai_train": {"status": "unknown", "basis": "Not needed for this fixture handoff."}
+    }
+  }
+}
