@@ -2,7 +2,7 @@
 
 本流程的 PEAK 第一批實作已落地：[遊戲分析](peak-core-plan.md) 與 [ssr.game-plan.v1](../plans/peak-core-v1.json)。保存端會驗證計畫、欄位和關聯，並從 DB 顯示本批實際覆蓋及缺漏；下文原先「未自動執行」描述的是規劃分析本身，不是目前保存端的驗證能力。
 
-[攀登與生存續批](peak-survival-plan.md)將同一 DB 擴充至 41 筆。[補給與區域行程續批](peak-expedition-plan.md)再新增 30 筆、補強 7 筆；目前共 71 筆，均已實際保存、讀回及畫面核對。
+[攀登與生存續批](peak-survival-plan.md)將同一 DB 擴充至 41 筆，[補給與區域行程續批](peak-expedition-plan.md)擴充至 71 筆，再由[後半行程與逐項徽章](peak-late-game-plan.md)新增 38 筆、修正 1 筆。目前共 109 筆，均已實際保存、讀回及畫面核對；四份計畫共 109 個目標已有修訂，仍需繼續補齊全遊戲資料。
 
 規劃唯一入口：[issue #1](https://github.com/HGPT-StreamSuite/ssr-collector-peak/issues/1)。流程已由使用者確認；實際遊戲的分類與目標仍需逐案分析，不能把現有 PEAK 盤點視為最終分類已獲批准。
 

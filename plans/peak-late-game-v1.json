@@ -1,0 +1,670 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-late-game-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "將後半路線視為補給、穿越環境、登頂撤離的連續決策，同時分清通關目標與額外徽章挑戰。",
+    "structure": "沿用道具、區域、機制與攻略分類，新增逐項徽章欄位。火山口與熔爐、幽暗沼澤與城塞成對，山頂另記撤離條件；徽章以具名條目與道具、區域建立有證據的關聯。",
+    "basis_url": "https://peak.wiki.gg/wiki/Level",
+    "basis_sections": [
+      "六段行程的後半配對",
+      "危險與補給",
+      "逐項徽章條件與獎勵",
+      "山頂撤離"
+    ],
+    "version_policy": "固定保存 2026-10-21 查得的來源；數值以明確條目的單位為準。反重力繩索炮的長度在詳細頁與徽章總表不一致，本批保留長度缺口，不挑一個數字硬填。徽章名稱為整理顯示，接收端已有官方名稱時保留官方名稱與來源。",
+    "exclusions": [
+      "本批 12 個徽章不等於全部 64 個徽章；其餘逐項資料仍需繼續補。",
+      "不宣稱已涵蓋全部道具或隱藏區域 Nadir。",
+      "不用新資料覆寫家裡的官方名稱、既有表格與歷史。"
+    ],
+    "questions": [
+      "後半區域如何配對與通過？",
+      "哪些物品應留到熔爐或城塞？",
+      "徽章需要單場完成還是累積？",
+      "如何安全處理箭矢並撤離山頂？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "描述規則與因果；攻略描述實際操作順序。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "label": "道具",
+      "rationale": "以個別物品為粒度；用途、取得和限制分列，不照網站導覽分群。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "purpose",
+          "label": "用途",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "acquisition",
+          "label": "取得方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "use_steps",
+          "label": "使用步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "location",
+      "label": "區域",
+      "rationale": "保存關卡順序與地形變體，不把每日輪替誤認為永久版本。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "stage",
+          "label": "關卡位置",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "terrain",
+          "label": "地形",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "hazards",
+          "label": "危險",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "rotation",
+          "label": "輪替規則",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "攻略",
+      "rationale": "按可執行任務組織；前置、步驟、結果與限制都要有證據或缺口。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "goal",
+          "label": "任務目標",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "prerequisites",
+          "label": "前置需求",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "outcome",
+          "label": "結果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "achievement",
+      "label": "逐項徽章",
+      "rationale": "每個徽章保存自己的條件、操作與獎勵；不把通關進度或整體系統介紹當成個別徽章。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "condition",
+          "label": "解鎖條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "操作提示",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "reward",
+          "label": "解鎖獎勵",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "eligibility",
+          "label": "適用探險",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "leads_to",
+      "label": "通往",
+      "from_categories": [
+        "location"
+      ],
+      "to_categories": [
+        "location"
+      ]
+    },
+    {
+      "id": "has_hazard",
+      "label": "具有危險",
+      "from_categories": [
+        "location"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    },
+    {
+      "id": "uses_item",
+      "label": "使用道具",
+      "from_categories": [
+        "guide",
+        "achievement"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    },
+    {
+      "id": "applies_to",
+      "label": "適用於",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "location",
+        "mechanic"
+      ]
+    },
+    {
+      "id": "earns_badge",
+      "label": "可取得徽章",
+      "from_categories": [
+        "guide",
+        "item",
+        "mechanic",
+        "location"
+      ],
+      "to_categories": [
+        "achievement"
+      ]
+    },
+    {
+      "id": "requires_location",
+      "label": "所在區域",
+      "from_categories": [
+        "achievement"
+      ],
+      "to_categories": [
+        "location"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-candlestick",
+      "category": "item",
+      "name": "燭臺",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Fog",
+      "source_locator": "Fog: Citadel Gloom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-fortified-milk",
+      "category": "item",
+      "name": "強化牛奶",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-glider",
+      "category": "item",
+      "name": "滑翔翼",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Glider",
+      "source_locator": "Glider",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-chain-launcher",
+      "category": "item",
+      "name": "鎖鏈發射器",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Chain_Launcher",
+      "source_locator": "Chain Launcher",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-anti-rope-spool",
+      "category": "item",
+      "name": "反重力繩索捲",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Anti-Rope_Spool",
+      "source_locator": "Anti-Rope Spool",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-book-of-bones",
+      "category": "item",
+      "name": "白骨之書",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Book_of_Bones",
+      "source_locator": "The Book of Bones",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-ancient-idol",
+      "category": "item",
+      "name": "遠古神像",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Ancient_Idol",
+      "source_locator": "Ancient Idol",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-red-shroomberry",
+      "category": "item",
+      "name": "紅色蘑菇莓",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-yellow-shroomberry",
+      "category": "item",
+      "name": "黃色蘑菇莓",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-green-shroomberry",
+      "category": "item",
+      "name": "綠色蘑菇莓",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-blue-shroomberry",
+      "category": "item",
+      "name": "藍色蘑菇莓",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-purple-shroomberry",
+      "category": "item",
+      "name": "紫色蘑菇莓",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-early-worm",
+      "category": "item",
+      "name": "早起蟲",
+      "question": "如何取得、使用，效果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Food",
+      "source_locator": "Food: fortified milk and berries",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-caldera",
+      "category": "location",
+      "name": "火山口",
+      "question": "所在階段、地形、危險與配對為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Caldera",
+      "source_locator": "Caldera",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-gloom",
+      "category": "location",
+      "name": "幽暗沼澤",
+      "question": "所在階段、地形、危險與配對為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Gloom",
+      "source_locator": "Gloom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-kiln",
+      "category": "location",
+      "name": "熔爐",
+      "question": "所在階段、地形、危險與配對為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Kiln",
+      "source_locator": "The Kiln",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-citadel",
+      "category": "location",
+      "name": "城塞",
+      "question": "所在階段、地形、危險與配對為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Citadel",
+      "source_locator": "The Citadel",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-peak",
+      "category": "location",
+      "name": "山頂",
+      "question": "所在階段、地形、危險與配對為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Peak_(biome)",
+      "source_locator": "Peak biome",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-lava",
+      "category": "mechanic",
+      "name": "岩漿與熔爐計時",
+      "question": "如何觸發、後果與數值為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Lava",
+      "source_locator": "Lava",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-belltower",
+      "category": "mechanic",
+      "name": "鐘塔驅霧",
+      "question": "如何觸發、後果與數值為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Gloom",
+      "source_locator": "Gloom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-arrow-trap",
+      "category": "mechanic",
+      "name": "箭矢陷阱",
+      "question": "如何觸發、後果與數值為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Citadel",
+      "source_locator": "The Citadel",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-24-karat",
+      "category": "achievement",
+      "name": "24K 徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Ancient_Idol",
+      "source_locator": "Ancient Idol",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-advanced-mycology",
+      "category": "achievement",
+      "name": "進階真菌學徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-applied-esoterica",
+      "category": "achievement",
+      "name": "應用秘術徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Book_of_Bones",
+      "source_locator": "The Book of Bones",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-archery",
+      "category": "achievement",
+      "name": "射箭徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-bellringer",
+      "category": "achievement",
+      "name": "敲鐘人徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-calcium-intake",
+      "category": "achievement",
+      "name": "鈣質攝取徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-hang-gliding",
+      "category": "achievement",
+      "name": "滑翔徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Glider",
+      "source_locator": "Glider",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-medieval-history",
+      "category": "achievement",
+      "name": "中世紀歷史徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-wanderer",
+      "category": "achievement",
+      "name": "漫遊者徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Gloom",
+      "source_locator": "Gloom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-well-rested",
+      "category": "achievement",
+      "name": "充分休息徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: explicit reward rows",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-bouldering",
+      "category": "achievement",
+      "name": "抱石徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-bookworm",
+      "category": "achievement",
+      "name": "書蟲徽章",
+      "question": "如何解鎖、適用哪些探險並得到什麼獎勵？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Badges",
+      "source_locator": "Badges: selected conditions",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-kiln",
+      "category": "guide",
+      "name": "熔爐攀登與補給",
+      "question": "前置準備、操作順序、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Kiln",
+      "source_locator": "The Kiln",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-gloom",
+      "category": "guide",
+      "name": "幽暗沼澤與鐘塔路線",
+      "question": "前置準備、操作順序、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Gloom",
+      "source_locator": "Gloom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-archery",
+      "category": "guide",
+      "name": "城塞拆箭與徽章",
+      "question": "前置準備、操作順序、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Citadel",
+      "source_locator": "The Citadel",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-peak-rescue",
+      "category": "guide",
+      "name": "山頂救援與撤離",
+      "question": "前置準備、操作順序、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Peak_(biome)",
+      "source_locator": "Peak biome",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-24-karat",
+      "category": "guide",
+      "name": "搬運神像取得 24K 徽章",
+      "question": "前置準備、操作順序、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Ancient_Idol",
+      "source_locator": "Ancient Idol",
+      "gap_reason": ""
+    }
+  ]
+}
