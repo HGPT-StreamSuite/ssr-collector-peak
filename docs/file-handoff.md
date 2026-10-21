@@ -1,5 +1,7 @@
 # 檔案交接契約 v1
 
+瀏覽器觀測可用 `local_chrome_computer_use` 或明確標示的 `local_chrome_playwright`；選定文章完整 DOM 使用 `rendered_dom_html`，指定 paragraphIndices 的純文字段落匯出使用 `rendered_text_html`。後者排除圖片及未選段落，scope 保留零起算段落索引，並依同一 exact URL、raw hash、中央許可規則驗證。這不改變原 `ssr.collection.v1` 根欄位或保存端責任。
+
 蒐集前先完成[遊戲知識規劃](game-knowledge-planning.md)。自有與客製擷取程式共同使用本契約；來源權限仍由接收端中央登記判定。
 
 最小必要格式、可選 DOM receipt、編碼／表格／時間／版本／多頁限制與唯一合成範例，統一以[接收端契約](https://github.com/HGPT-StreamSuite/ssr-knowledge/blob/codex/peak-local-collection/docs/collection-contract-v1.md)及實際 `validate_bundle` 為準。自有與客製 collector 使用同一 format，producer 保留各自識別。

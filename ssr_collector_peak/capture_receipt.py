@@ -10,8 +10,8 @@ FIELDS = {'format','requested_url','final_url','title','captured_at','raw_sha256
 def validate_capture_receipt(value, source, raw):
     if not isinstance(value,dict) or set(value) != FIELDS:
         raise ContractError('exact ssr.browser-export.v1 receipt required')
-    if (value['format'] != 'ssr.browser-export.v1' or value['method'] != 'local_chrome_computer_use'
-            or value['export_format'] != 'rendered_dom_html' or value['http_status'] is not None
+    if (value['format'] != 'ssr.browser-export.v1' or value['method'] not in {'local_chrome_computer_use','local_chrome_playwright'}
+            or value['export_format'] not in {'rendered_dom_html','rendered_text_html'} or value['http_status'] is not None
             or value['raw_sha256'] != digest(raw)):
         raise ContractError('DOM export method/hash differs; unobserved HTTP status must be null')
     for field in ['requested_url','final_url']:

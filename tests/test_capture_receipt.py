@@ -22,8 +22,11 @@ class CaptureReceiptTests(unittest.TestCase):
     def test_observation_is_bound_to_exact_file_url_and_unknown_http(self):
         source=file_source(); value=receipt(source)
         validate_capture_receipt(value,source,RAW)
+        playwright=copy.deepcopy(value);playwright['method']='local_chrome_playwright'
+        playwright['export_format']='rendered_text_html'
+        validate_capture_receipt(playwright,source,RAW)
         for field,changed in [('raw_sha256','0'*64),('final_url','https://example.test/other'),
-                              ('http_status',200),('captured_at','2026-01-01T00:00:00')]:
+                              ('http_status',200),('captured_at','2026-01-01T00:00:00'),('method','guessed_browser')]:
             bad=copy.deepcopy(value);bad[field]=changed
             with self.subTest(field=field),self.assertRaises(ContractError):validate_capture_receipt(bad,source,RAW)
 
