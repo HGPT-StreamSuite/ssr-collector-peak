@@ -24,10 +24,12 @@
 2. 在 **ssr-knowledge** 執行 `catalog --data-dir C:\private\fixture-archive export-source-plan`，將 UTF-8 JSON stdout 存成私有 `source-plan.json`。匯出不寫 DB，不含知識條目。
 3. 在 **collector** 執行 README 的 `intake-file`，得到 snapshot ID，再執行 `bundle`。plain_text 原樣保存 UTF-8 文字；html 只取中央 selector 指定的正文，略過 script/style/hidden。均不執行來源文字、不呼叫 LLM。
 4. 在 **ssr-knowledge** 執行 `catalog --data-dir C:\private\fixture-archive ingest-collection --file C:\private\handoff\ID.collection.json`。預設只檢查、read-only、`state=validated_only`。
-5. 同一命令加 `--apply` 才保存原文、正文、metadata、receipt 和來源最新 snapshot。這是唯一正式 archive 的保存點；**不建立知識條目、不生成摘要、不審核、不發布**。之後若需要草稿，沿用原 repo 明確的草稿匯入與人工審核流程。
+5. 同一命令加 `--apply` 才保存原文、正文、metadata、receipt 和來源最新 snapshot。這是文件接收的保存點；此命令不建立知識條目或生成摘要。**B 的完整責任還包括整理與知識保存**：已有可使用的補充內容時，須從已存原文建立逐項有來源的草稿，再以 knowledge 的 `catalog import-drafts --file FILE` 實際存成待審修訂；不能只保存 snapshot 或新增待辦就結束。人工審核與發布是另行操作。
 6. `catalog --data-dir PATH snapshot --snapshot-id ID --body` 可在另一程序讀回；`catalog search --text TEXT` 的正式結果仍只來自經審核發布且用途允許的知識條目。
 
 以上是在各自 repo 使用 `uv --offline run --no-sync python -m ssr_knowledge ...` 或 `python -m ssr_collector_peak ...`，不由任何一端啟動另一端。操作員或獨立驗收腳本傳遞檔案。
+
+保存修訂後以新程序 `catalog entry --entry-id ID` 及 `catalog relations --entry-id ID` 讀回，再由同一 DB 的查詢頁核對。待審內容可使用 `search --preview` 或唯讀審查頁；預設正式搜尋查不到待審資料不代表保存失敗，也不能為了展示而自動批准。完整責任與 DoD 見 [保存與查詢驗收](https://github.com/HGPT-StreamSuite/ssr-knowledge/blob/codex/peak-local-collection/docs/persistence-and-query-acceptance.md)。
 
 可選的 `Start-Acceptance.cmd`／`tools.acceptance_demo` 是操作員明確啟動的驗收腳本，使用兩個獨立 CLI 程序傳檔，並提供唯讀展示；不在生產 collector 核心內呼叫保存端。具體操作見 [親自驗收](acceptance.md)。
 
