@@ -29,6 +29,7 @@ def main() -> None:
     intake.add_argument('--file',required=True); intake.add_argument('--stage-dir',required=True)
     intake.add_argument('--format',choices=['plain_text','html'],required=True)
     intake.add_argument('--origin',choices=['operator_file','synthetic_fixture'],required=True)
+    intake.add_argument('--capture-receipt',help='optional ssr.browser-export.v1 observation file; requires operator_file HTML')
     bundle=commands.add_parser('bundle',help='write a private data-only packet; does not invoke the archive')
     bundle.add_argument('--stage-dir',required=True); bundle.add_argument('--snapshot-id',required=True); bundle.add_argument('--output-dir',required=True)
     stats=commands.add_parser('stats'); stats.add_argument('--stage-dir',required=True)
@@ -48,7 +49,8 @@ def main() -> None:
             from .file_intake import intake_file
             source=source_from_plan(args.plan,args.source_id)
             with StageLedger(args.stage_dir) as stage:
-                result=intake_file(stage,source,args.file,args.format,args.origin)
+                receipt=json.loads(Path(args.capture_receipt).read_text(encoding='utf-8-sig')) if args.capture_receipt else None
+                result=intake_file(stage,source,args.file,args.format,args.origin,receipt)
         else:
             with StageLedger(args.stage_dir) as stage:
                 result=stage.bundle(args.snapshot_id,args.output_dir) if args.action=='bundle' else stage.stats()

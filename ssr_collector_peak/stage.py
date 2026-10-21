@@ -59,7 +59,7 @@ class StageLedger:
         sid=digest(source['url']+'\0'+digest(raw)+'\0'+digest(canonical(source)))
         old=self.db.execute('SELECT latest_snapshot FROM sources WHERE source_id=?',(source['source_id'],)).fetchone()
         with self.db:
-            self.db.execute('INSERT OR IGNORE INTO snapshots VALUES(?,?,?,?,?,?)',(sid,source['source_id'],utc_now(),raw,body,canonical(source)))
+            self.db.execute('INSERT OR IGNORE INTO snapshots VALUES(?,?,?,?,?,?)',(sid,source['source_id'],metadata.get('capture_receipt',{}).get('captured_at',utc_now()),raw,body,canonical(source)))
             self.db.execute('INSERT INTO observations(snapshot_id,observed_at,metadata_json) VALUES(?,?,?)',(sid,utc_now(),canonical(metadata)))
             self.db.execute('UPDATE sources SET latest_snapshot=? WHERE source_id=?',(sid,source['source_id']))
         return {'source_id':source['source_id'],'snapshot_id':sid,'state':'unchanged' if old and old[0]==sid else 'saved',

@@ -1,5 +1,13 @@
 # 檔案交接契約 v1
 
+蒐集前先完成[遊戲知識規劃](game-knowledge-planning.md)。自有與客製擷取程式共同使用本契約；來源權限仍由接收端中央登記判定。
+
+最小必要格式、可選 DOM receipt、編碼／表格／時間／版本／多頁限制與唯一合成範例，統一以[接收端契約](https://github.com/HGPT-StreamSuite/ssr-knowledge/blob/codex/peak-local-collection/docs/collection-contract-v1.md)及實際 `validate_bundle` 為準。自有與客製 collector 使用同一 format，producer 保留各自識別。
+
+`tools/capture_browser_export.mjs` 是既有 local computer-use runtime 的獨立 DOM 檔案 adapter：接受選定 tab、明確許可的 source plan、文章 selector 與 checkout 外輸出目錄。它不導覽、不發 HTTP、不開 DB、不呼叫 knowledge；不允許 unknown／prohibited 來源。另以 `intake-file --origin operator_file --format html --capture-receipt FILE` 驗證檔案後產生既有 v1 資料包。許可／實際 tab 與來源核對由操作者負責，metadata 不是權限或抓取成功的簽章。
+
+目前 Wiki 採集受已讀條款限制，不能用合成檢查或這個 adapter 宣稱 Shroomberry／徽章真站至 DB 已通過。已取得私有檔案保留，不自動登記成允許來源。
+
 這是第一步分離：新 repo 擁有自己的蒐集核心、私有 spool 和檔案輸出；`ssr-knowledge` 新增接收端。原 repo 的既有離線流程、HTTP、研究工作與文件仍保留，並未宣稱全面遷移完成。不串接 ssr-chat，不共用程式套件，不部署服務。
 
 ## 唯一政策來源
@@ -25,7 +33,7 @@
 
 ## `ssr.collection.v1`
 
-根欄位恰為 `format`、`producer`、`source_ref`、`document`、`bundle_id`。producer 固定 `ssr-collector-peak/0.1.0`。
+根欄位恰為 `format`、`producer`、`source_ref`、`document`、`bundle_id`。本 collector 的 producer 為 `ssr-collector-peak/0.1.0`；相容客製 collector 使用自身名稱與 semantic version。
 
 `source_ref` 只有中央 source_id 和 config_sha256，不含政策。`document` 恰含 url、captured_at、observed_at、raw_base64、raw_sha256、body、body_sha256、metadata。bundle_id 是其餘根欄位 canonical JSON 的 SHA-256；canonical 使用排序鍵、UTF-8、不跳脫 Unicode、緊湊分隔符且拒絕 NaN。正文雜湊同樣以 UTF-8 計算。
 
@@ -33,7 +41,7 @@
 
 檔案 metadata 明確記錄 acquisition_method=operator_file 或 synthetic_fixture、http_requests=0、collector_called_llm=false；不接受假稱 browser_fetch_succeeded。captured_at 是暫存時間，observed_at 是本次取得觀測時間，均不是網頁更新時間。來源更新未知時保持 null。
 
-雜湊保護完整性，**不提供身分驗證、簽章或網站取得的證明**。metadata 是生產端宣告的觀測紀錄；操作員仍須核對真實取得與許可。本版沒有自動 Chrome 匯出器或真實來源端到端取得驗證。
+雜湊保護完整性，**不提供身分驗證、簽章或網站取得的證明**。metadata 是生產端宣告的觀測紀錄；操作員仍須核對真實取得與許可。目前有明確許可來源的選定 tab DOM 匯出 adapter 與可選 receipt 驗證；沒有無人爬站、權限判定自動化或真實來源端到端通過證據。
 
 ## 去重、失敗與可選 HTTP
 

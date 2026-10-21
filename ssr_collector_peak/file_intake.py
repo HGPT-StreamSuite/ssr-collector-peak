@@ -7,7 +7,7 @@ from .primitives import ContractError, digest, utc_now
 from .stage import StageLedger
 
 
-def intake_file(stage: StageLedger, source: dict[str,Any], file: str, body_format: str, origin: str) -> dict[str,Any]:
+def intake_file(stage: StageLedger, source: dict[str,Any], file: str, body_format: str, origin: str, capture_receipt: dict | None = None) -> dict[str,Any]:
     if source.get('acquisition',{}).get('kind')!='approved_local_file':
         raise ContractError('file intake requires a separately registered approved_local_file source')
     policy=source['policy']
@@ -19,6 +19,10 @@ def intake_file(stage: StageLedger, source: dict[str,Any], file: str, body_forma
     if not path.is_file() or not 40<=path.stat().st_size<=2_000_000:
         raise ContractError('local file must be 40 bytes to 2 MB')
     raw=path.read_bytes(); text=raw.decode('utf-8-sig',errors='strict')
+    if capture_receipt is not None:
+        from .capture_receipt import validate_capture_receipt
+        if origin != 'operator_file' or body_format != 'html':raise ContractError('DOM receipt requires operator_file HTML input')
+        validate_capture_receipt(capture_receipt,source,raw)
     if '\x00' in text: raise ContractError('expected UTF-8 text without NUL')
     if body_format=='html':
         parser=BodyExtractor(source['selector']); parser.feed(text); parser.close(); body=parser.body()
@@ -32,6 +36,10 @@ def intake_file(stage: StageLedger, source: dict[str,Any], file: str, body_forma
         'canonical_url':source['original_url'],'canonical_basis':'Central attribution URL; local file, not an HTTP fetch',
         'source_updated_at':None,'source_updated_basis':'Unknown; file capture time is not the page update time',
         'body_locator':{'format':body_format},'imported_at':utc_now()}
+    if capture_receipt is not None:
+        meta.update(capture_receipt=capture_receipt,requested_url=capture_receipt['requested_url'],
+                    canonical_url=capture_receipt['final_url'],canonical_basis='Observed selected Chrome tab URL; not an HTTP status',
+                    source_updated_basis=str(capture_receipt['page_updated'])+'; page timezone unknown',browser_network_request_count=None)
     stage.register_source(source)
     result=stage.save_snapshot(source,raw,body,meta)
     stage.event(source['source_id'],'local_file_intake',{**result,'http_requests':0})
