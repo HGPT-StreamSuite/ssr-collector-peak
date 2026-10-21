@@ -1,0 +1,583 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-expedition-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "先選路線與補給，再依區域危險保留合適道具；攀爬時消耗主體力，必要時用額外體力完成路段，並救援失去行動能力的隊友。",
+    "structure": "食物保留在道具分類，分列效果、取得、操作與限制；區域描述地形及風險；狀態解釋成因與恢復；機制說明規則；攻略只組合已有來源支持的操作。沿用自己的分類，不複製 Wiki 導覽。",
+    "basis_url": "https://peak.wiki.gg/wiki/Level",
+    "basis_sections": [
+      "六段行程與替代區域",
+      "食物生食／烹煮效果",
+      "炎熱、孢子、嗜睡",
+      "裝備操作與救援"
+    ],
+    "version_policy": "依 2026-10-21 實際取得的有界索引文字保存固定來源。食物原始與烹煮總效果分開；救援爪採詳細條目的遊戲內公尺，不混用總表的數字。區域先後依六段行程記錄，不把舊頁的每兩天輪替寫成固定排程。官方更新沿用原計畫目標並單獨使用官方證據。",
+    "exclusions": [
+      "本批不宣稱全部道具、天然食物、徽章與世界觀完整。",
+      "不補造未查明的昏迷固定倒數秒數。",
+      "不把官方公告所說的修正寫成已完成遊戲實測。"
+    ],
+    "questions": [
+      "食物未煮及煮熟後分別補多少？",
+      "第三區如何防曬或避開暴風雪？",
+      "額外體力何時消耗？",
+      "如何使用噴射背包和救援爪？",
+      "孢子感染與一般孢子累積有何不同？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "描述規則與因果；攻略描述實際操作順序。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "label": "狀態",
+      "rationale": "影響體力或行動的條件獨立建條目，便於查詢來源和解除方式。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "effect",
+          "label": "效果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "causes",
+          "label": "來源",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "remedies",
+          "label": "解除方式",
+          "type": "strings",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "label": "道具",
+      "rationale": "以個別物品為粒度；用途、取得和限制分列，不照網站導覽分群。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "purpose",
+          "label": "用途",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "acquisition",
+          "label": "取得方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "use_steps",
+          "label": "使用步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "location",
+      "label": "區域",
+      "rationale": "保存關卡順序與地形變體，不把每日輪替誤認為永久版本。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "stage",
+          "label": "關卡位置",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "terrain",
+          "label": "地形",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "hazards",
+          "label": "危險",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "rotation",
+          "label": "輪替規則",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "攻略",
+      "rationale": "按可執行任務組織；前置、步驟、結果與限制都要有證據或缺口。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "goal",
+          "label": "任務目標",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "prerequisites",
+          "label": "前置需求",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "outcome",
+          "label": "結果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "uses_mechanic",
+      "label": "使用機制",
+      "from_categories": [
+        "item",
+        "guide"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    },
+    {
+      "id": "requires_item",
+      "label": "使用物品",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    },
+    {
+      "id": "counters",
+      "label": "預防或降低狀態",
+      "from_categories": [
+        "item",
+        "guide"
+      ],
+      "to_categories": [
+        "status"
+      ]
+    },
+    {
+      "id": "causes",
+      "label": "可能造成狀態",
+      "from_categories": [
+        "item",
+        "location"
+      ],
+      "to_categories": [
+        "status"
+      ]
+    },
+    {
+      "id": "applies_to",
+      "label": "適用區域",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "location"
+      ]
+    },
+    {
+      "id": "explains",
+      "label": "說明機制",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    },
+    {
+      "id": "has_hazard",
+      "label": "區域危險",
+      "from_categories": [
+        "location"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-trail-mix",
+      "category": "item",
+      "name": "綜合堅果",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Trail_Mix",
+      "source_locator": "Trail Mix / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-granola-bar",
+      "category": "item",
+      "name": "穀物棒",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Granola_Bar",
+      "source_locator": "Granola Bar / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-airline-food",
+      "category": "item",
+      "name": "飛機餐",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Airplane_food",
+      "source_locator": "Airline Food / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-sports-drink",
+      "category": "item",
+      "name": "運動飲料",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Sports_Drink",
+      "source_locator": "Sports Drink / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-energy-drink",
+      "category": "item",
+      "name": "能量飲料",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Energy_Drink",
+      "source_locator": "Energy Drink / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-big-lollipop",
+      "category": "item",
+      "name": "大棒棒糖",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Lolipop",
+      "source_locator": "Big Lollipop / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scout-cookies",
+      "category": "item",
+      "name": "童軍餅乾",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Scout_Cookies",
+      "source_locator": "Scout Cookies / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-mandrake",
+      "category": "item",
+      "name": "曼德拉草",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mandrake",
+      "source_locator": "Mandrake / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-half-coconut",
+      "category": "item",
+      "name": "半顆椰子",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Food — Half-Coconut / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-jetpack",
+      "category": "item",
+      "name": "噴射背包",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Jetpack",
+      "source_locator": "Jetpack / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rescue-claw",
+      "category": "item",
+      "name": "救援爪",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Rescue_Claw",
+      "source_locator": "Rescue Claw / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-sunscreen",
+      "category": "item",
+      "name": "防曬噴霧",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Sunscreen",
+      "source_locator": "Sunscreen / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-parasol",
+      "category": "item",
+      "name": "遮陽傘",
+      "question": "效果、取得、操作及限制是什麼？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Parasol",
+      "source_locator": "Parasol / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-tropics",
+      "category": "location",
+      "name": "熱帶雨林",
+      "question": "位於哪一段、地形和危險為何、如何換區？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Tropics",
+      "source_locator": "Tropics / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-roots",
+      "category": "location",
+      "name": "根林",
+      "question": "位於哪一段、地形和危險為何、如何換區？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Roots",
+      "source_locator": "Roots / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-alpine",
+      "category": "location",
+      "name": "高山",
+      "question": "位於哪一段、地形和危險為何、如何換區？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Alpine",
+      "source_locator": "Alpine / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-mesa",
+      "category": "location",
+      "name": "方山",
+      "question": "位於哪一段、地形和危險為何、如何換區？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Sun",
+      "source_locator": "Mesa / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-heat",
+      "category": "status",
+      "name": "炎熱",
+      "question": "如何產生、影響什麼、如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/How_to_play",
+      "source_locator": "How to play — status causes / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-spores",
+      "category": "status",
+      "name": "孢子",
+      "question": "如何產生、影響什麼、如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/How_to_play",
+      "source_locator": "How to play — status causes / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-drowsy",
+      "category": "status",
+      "name": "嗜睡",
+      "question": "如何產生、影響什麼、如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/How_to_play",
+      "source_locator": "How to play — status causes / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bonus-stamina",
+      "category": "mechanic",
+      "name": "額外體力",
+      "question": "規則、觸發、結果及可查明數值為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Frost",
+      "source_locator": "Stamina bar — reserve and decay / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-blizzard",
+      "category": "mechanic",
+      "name": "暴風雪與避寒",
+      "question": "規則、觸發、結果及可查明數值為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Blizzard",
+      "source_locator": "Blizzard / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-island-route",
+      "category": "mechanic",
+      "name": "六段行程與地圖切換",
+      "question": "規則、觸發、結果及可查明數值為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Level",
+      "source_locator": "Island / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-food-prep",
+      "category": "guide",
+      "name": "選擇補給與烹煮食物",
+      "question": "需要什麼、如何操作、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Granola_Bar",
+      "source_locator": "Granola Bar / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-jetpack",
+      "category": "guide",
+      "name": "使用噴射背包與補充燃料",
+      "question": "需要什麼、如何操作、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Jetpack",
+      "source_locator": "Jetpack / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-mesa-sun",
+      "category": "guide",
+      "name": "穿越方山日照區",
+      "question": "需要什麼、如何操作、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mesa",
+      "source_locator": "Mesa — sunlight / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-alpine-shelter",
+      "category": "guide",
+      "name": "在高山避開暴風雪",
+      "question": "需要什麼、如何操作、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Alpine",
+      "source_locator": "Alpine / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-rescue-claw",
+      "category": "guide",
+      "name": "用救援爪接近岩壁或拉回隊友",
+      "question": "需要什麼、如何操作、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Rescue_Claw",
+      "source_locator": "Rescue Claw / selected source text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-spores",
+      "category": "guide",
+      "name": "離開孢子區並處理感染",
+      "question": "需要什麼、如何操作、結果與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/How_to_play",
+      "source_locator": "How to play — status causes / selected source text",
+      "gap_reason": ""
+    }
+  ]
+}

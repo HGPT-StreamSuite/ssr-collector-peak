@@ -6,7 +6,7 @@ PEAK（Steam app `3527290`）的獨立本機蒐集準備工具。只處理取得
 
 ## 一鍵本機驗收
 
-PEAK 第一批已完成[遊戲分析與可執行建庫計畫](docs/peak-core-plan.md)。[攀登與生存續批](docs/peak-survival-plan.md)再新增 29 筆道具、機制、狀態與攻略，補強 4 筆既有內容；同一個本機持久 DB 現有 41 筆待審知識、148 個已存欄位與 32 條關聯，已逐筆讀回及 Chrome 畫面驗證。真實查詢入口為 `http://127.0.0.1:8767/`；下方一鍵流程仍是合成隔離測試。
+PEAK 第一批已完成[遊戲分析與可執行建庫計畫](docs/peak-core-plan.md)，再以[攀登與生存續批](docs/peak-survival-plan.md)及[補給與區域行程續批](docs/peak-expedition-plan.md)擴充。同一個本機持久 DB 現有 **71 筆待審知識、278 個已存欄位與 62 條關聯**，已逐筆讀回及 Chrome 畫面驗證。最新一批新增 30 筆、補強 7 筆，尚有 9 個明列缺欄；計畫目標已有修訂不代表全遊戲內容已齊。真實查詢入口為 `http://127.0.0.1:8767/`；下方一鍵流程仍是合成隔離測試。
 
 在 Windows 使用既有 ssr-knowledge checkout 的 `.venv` 和 uv；不安裝或建立環境。在本 repo 執行：
 
