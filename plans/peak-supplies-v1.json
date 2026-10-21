@@ -1,0 +1,562 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-supplies-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "從準備、移動、治療、任務條件與撤離分析物品和徽章；把物品用途接到可執行的挑戰步驟。",
+    "structure": "補足既有 12 項以外的 52 個徽章；道具按實際用途與不同效果分項。六種大廳西洋棋棋子合為一組、四色莓蕉皮合為一組並保留別名；不複製網站分類。",
+    "basis_url": "https://peak.wiki.gg/wiki/Category%3AItems",
+    "basis_sections": [
+      "完整徽章名冊與各項條件",
+      "道具效果、取得、操作及限制",
+      "已停用與大廳物品",
+      "四護符與納迪爾"
+    ],
+    "version_policy": "保存 2026-10-21 觀測的固定來源摘錄；正文以詳細道具頁優先於彙總表。沒有明確支持的數值不推算填入。",
+    "exclusions": [
+      "133 個來源項目去除別名及同效變體重複後，映射為 123 個道具條目；不代表未來版本永久完整。",
+      "昏迷基準倒數秒數仍缺可靠證據；不以重述現有規則清除缺口。",
+      "v1 關聯只在同一建庫計畫內建立；不挪動既有條目以強行串接。",
+      "停用道具作為歷史紀錄，明示不能在一般探險取得。"
+    ],
+    "questions": [
+      "徽章怎麼完成、在哪種探險計算、得到什麼？",
+      "物品從哪裡取得、怎麼操作、有哪些代價？",
+      "如何收齊四護符並從納迪爾撤離？",
+      "已收錄清單與未解欄位如何直接查 DB 核對？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "item",
+      "label": "道具",
+      "rationale": "以個別物品為粒度；用途、取得和限制分列，不照網站導覽分群。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "purpose",
+          "label": "用途",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "acquisition",
+          "label": "取得方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "use_steps",
+          "label": "使用步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "transforms_to",
+      "label": "轉化為",
+      "from_categories": [
+        "item"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-aloe-vera",
+      "category": "item",
+      "name": "蘆薈",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Aloe_Vera",
+      "source_locator": "Aloe Vera",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rocketpack",
+      "category": "item",
+      "name": "火箭背包",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Rocketpack",
+      "source_locator": "Rocketpack",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-remedy-fungus",
+      "category": "item",
+      "name": "療癒菌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Remedy_Fungus",
+      "source_locator": "Remedy Fungus",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-warp-fungus",
+      "category": "item",
+      "name": "傳送菌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Warp Fungus",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-pirates-compass",
+      "category": "item",
+      "name": "海盜羅盤",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Pirate%27s_Compass",
+      "source_locator": "Pirate's Compass",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-warp-compass",
+      "category": "item",
+      "name": "傳送羅盤（已停用）",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Warp_Compass",
+      "source_locator": "Warp Compass: disabled",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-dynamite",
+      "category": "item",
+      "name": "炸藥",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Dynamite",
+      "source_locator": "Dynamite",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guidebook",
+      "category": "item",
+      "name": "童軍指南",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Guidebook",
+      "source_locator": "Guidebook",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scroll",
+      "category": "item",
+      "name": "卷軸",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Notes",
+      "source_locator": "Scroll",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-conch",
+      "category": "item",
+      "name": "海螺",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Conch",
+      "source_locator": "Conch",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-event-bugle",
+      "category": "item",
+      "name": "演唱會號角（已停用）",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bugle%3F",
+      "source_locator": "Bugle?: retired event item",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-snowball",
+      "category": "item",
+      "name": "雪球",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Snowball",
+      "source_locator": "Snowball",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-frog",
+      "category": "item",
+      "name": "青蛙",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Frog",
+      "source_locator": "Frog",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-frog-legs",
+      "category": "item",
+      "name": "蛙腿",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Frog_Legs",
+      "source_locator": "Frog Legs",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scorpion",
+      "category": "item",
+      "name": "蠍子",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Scorpion",
+      "source_locator": "Scorpion",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-blowgun",
+      "category": "item",
+      "name": "吹箭筒",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Blowgun",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-fanny-pack",
+      "category": "item",
+      "name": "腰包",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Fanny Pack",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-flare",
+      "category": "item",
+      "name": "信號棒",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Flare",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-compass",
+      "category": "item",
+      "name": "羅盤",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Compass",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-torch",
+      "category": "item",
+      "name": "火把",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Torch",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-pandoras-lunchbox",
+      "category": "item",
+      "name": "潘朵拉餐盒",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Pandora's Lunchbox",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-chess-pieces",
+      "category": "item",
+      "name": "西洋棋棋子",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Airport",
+      "source_locator": "Airport recreation items",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-basketball",
+      "category": "item",
+      "name": "籃球",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Airport",
+      "source_locator": "Airport recreation items",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-red-crispberry",
+      "category": "item",
+      "name": "紅色脆莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Red Crispberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-yellow-crispberry",
+      "category": "item",
+      "name": "黃色脆莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Yellow Crispberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-green-crispberry",
+      "category": "item",
+      "name": "綠色脆莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Green Crispberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-purple-kingberry",
+      "category": "item",
+      "name": "紫色王莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Purple Kingberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-yellow-kingberry",
+      "category": "item",
+      "name": "黃色王莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Yellow Kingberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-green-kingberry",
+      "category": "item",
+      "name": "綠色王莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Green Kingberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-yellow-berrynana",
+      "category": "item",
+      "name": "黃色莓蕉",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Yellow Berrynana food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-pink-berrynana",
+      "category": "item",
+      "name": "粉紅色莓蕉",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Pink Berrynana food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-blue-berrynana",
+      "category": "item",
+      "name": "藍色莓蕉",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Blue Berrynana food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-brown-berrynana",
+      "category": "item",
+      "name": "棕色莓蕉",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Brown Berrynana food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-yellow-clusterberry",
+      "category": "item",
+      "name": "黃色簇莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Yellow Clusterberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-red-clusterberry",
+      "category": "item",
+      "name": "紅色簇莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Red Clusterberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-black-clusterberry",
+      "category": "item",
+      "name": "黑色簇莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Black Clusterberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-orange-winterberry",
+      "category": "item",
+      "name": "橘色冬莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Orange Winterberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-red-prickleberry",
+      "category": "item",
+      "name": "紅色刺莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Red Prickleberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-gold-prickleberry",
+      "category": "item",
+      "name": "金色刺莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Gold Prickleberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scorchberry",
+      "category": "item",
+      "name": "灼熱莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Scorchberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-marshmallow",
+      "category": "item",
+      "name": "棉花糖",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Marshmallow food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-big-egg",
+      "category": "item",
+      "name": "大蛋",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_Bird",
+      "source_locator": "Cooked Bird",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-small-egg",
+      "category": "item",
+      "name": "小蛋",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_Bird",
+      "source_locator": "Cooked Bird",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-beehive",
+      "category": "item",
+      "name": "蜂巢",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Beehive",
+      "source_locator": "Beehive",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-coconut",
+      "category": "item",
+      "name": "整顆椰子",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Coconut: split result",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-berrynana-peel",
+      "category": "item",
+      "name": "莓蕉皮",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Template%3ABerrynana_peel",
+      "source_locator": "Berrynana peels: shared behavior",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-tick",
+      "category": "item",
+      "name": "壁蝨",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Tick",
+      "source_locator": "Tick",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-napberry",
+      "category": "item",
+      "name": "瞌睡莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Napberry_Plant",
+      "source_locator": "Napberry",
+      "gap_reason": ""
+    }
+  ]
+}
