@@ -6,6 +6,8 @@ PEAK（Steam app `3527290`）的獨立本機蒐集準備工具。只處理取得
 
 ## 一鍵本機驗收
 
+PEAK 第一批已完成[遊戲分析與可執行建庫計畫](docs/peak-core-plan.md)：13 個類別／具體目標、欄位型別、缺漏語意及 8 種關聯。新的本機持久 DB 已完成 12 條真實待審知識的寫入、讀回及 Chrome 畫面驗證；下方一鍵流程仍是合成隔離測試，不取代真實 DB 驗收。
+
 在 Windows 使用既有 ssr-knowledge checkout 的 `.venv` 和 uv；不安裝或建立環境。在本 repo 執行：
 
 ```cmd
@@ -20,9 +22,9 @@ Start-Acceptance.cmd "C:\path\ssr-knowledge" "C:\private\peak-acceptance" "C:\pr
 
 已有私有完整性稽核報告時，可用第四個參數指定 Git checkout 外的報告目錄（CLI 為 `--audit-dir`）。固定檔名為 `report.html`、`gaps.csv`，不隨 repo 提供真實報告或來源文本。首頁會在兩個檔案皆可讀時顯示報告連結；`http://127.0.0.1:8766/audit` 顯示 HTML，`/audit/gaps.csv` 下載 CSV。路由只允許這兩個檔案，不列目錄、不建立缺失檔案、不讀取目錄外的連結目標，也不寫入或審核正式知識；既有 loopback、Host 檢查與唯讀邊界保留。報告是操作者另外產生的查證結果，提供入口不代表內容已通過人工審核。
 
-`tools/acceptance_demo.py` 是操作者明確啟動的驗收工具，以子程序跑兩邊 CLI；生產核心沒有這項依賴。第一次啟動若缺既有 `.venv`、uv、權限或 port 被占用會報錯，不自動安裝、不用示範資料掩蓋失敗。重播、停止和實際觀測方式見 [親自驗收](docs/acceptance.md)。本版真站至入庫仍未通過，本輪真實網站原文新增 0。
+`tools/acceptance_demo.py` 是操作者明確啟動的驗收工具，以子程序跑兩邊 CLI；生產核心沒有這項依賴。第一次啟動若缺既有 `.venv`、uv、權限或 port 被占用會報錯，不自動安裝、不用示範資料掩蓋失敗。重播、停止和實際觀測方式見 [親自驗收](docs/acceptance.md)。真實來源的本輪結果另見上述 PEAK 第一批實測，與此合成入口分開。
 
-使用者目前選定的網站取得方式是 **computer use／本機 Chrome**。`tools/capture_browser_export.mjs` 在既有 computer-use runtime 對明確許可來源的選定 tab 匯出文章 DOM HTML／觀測紀錄，無 knowledge／DB 依賴；`intake-file` 本身不開 Chrome，另以 `--capture-receipt FILE` 核對並保存觀測。這是有界檔案 adapter，尚無獲准真站至知識 DB 通過證據。瀏覽器可讀、robots 或 CC 文字不單獨授予採集權限；明確限制不換路繞過。
+網站取得使用 **本機 Chrome**。`tools/capture_browser_export.mjs` 對明確許可來源的選定 tab 匯出文章 DOM 或指定段落文字，無 knowledge／DB 依賴；觀測方法區分 computer-use 與 Playwright。`intake-file` 本身不開 Chrome，另以 `--capture-receipt FILE` 核對並保存觀測。Wikipedia 本批已完成真實交接與待審保存；瀏覽器可讀、robots 或 CC 文字不單獨授予其他來源的採集權限，明確限制不換路繞過。
 
 `http-collect` 保留為可選架構，預設只列計畫、零網路請求，不是本次選定的取得流程。必須另有中央核可的精確來源設定及 `--fetch` 才會請求 HTTP。未知用途維持 unknown，禁止用途維持 prohibited，不自動改判。
 
