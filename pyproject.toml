@@ -1,0 +1,10 @@
+[project]
+name = "ssr-collector-peak"
+version = "0.1.0"
+requires-python = ">=3.11"
+description = "Standalone bounded PEAK acquisition; explicit file handoff only"
+readme = "README.md"
+dependencies = []
+
+[tool.uv]
+package = false

@@ -1,0 +1,513 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-survival-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "先判斷路線與體力，再選攀登工具；遇到受傷或環境狀態時使用對應物品，補給並繼續上攀。",
+    "structure": "延續 peak-core-v1 的自訂分類。新增物品以用途、取得、操作、限制四欄整理；機制解釋規則，狀態列成因與解除方式，攻略按可執行任務連結所需物品與機制。既有條目沿用原計畫及 ID 補值，新批次使用獨立不可變計畫。",
+    "basis_url": "https://peak.wiki.gg/wiki/How_to_play",
+    "basis_sections": [
+      "Inventory & Backpack",
+      "Status effects",
+      "各物品用途及操作段落",
+      "Cooking stages"
+    ],
+    "version_policy": "保存 2026-10-21 取得的索引文字與逐欄引用；觀測時間與遊戲版本分列。數值依各篇具體條目，舊表格與不同版本差異不混成平均值。",
+    "exclusions": [
+      "不擷取圖片或模型",
+      "不把物品使用說明標成遊戲實測",
+      "本批不處理官方更新與徽章全表"
+    ],
+    "questions": [
+      "如何鋪設繩路與在岩壁中途休息？",
+      "哪些用品能處理受傷、中毒、寒冷？",
+      "如何收納、烹飪和維持可用體力？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "描述規則與因果；攻略描述實際操作順序。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "label": "狀態",
+      "rationale": "影響體力或行動的條件獨立建條目，便於查詢來源和解除方式。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "effect",
+          "label": "效果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "causes",
+          "label": "來源",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "remedies",
+          "label": "解除方式",
+          "type": "strings",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "label": "道具",
+      "rationale": "以個別物品為粒度；用途、取得和限制分列，不照網站導覽分群。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "purpose",
+          "label": "用途",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "acquisition",
+          "label": "取得方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "use_steps",
+          "label": "使用步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "攻略",
+      "rationale": "按可執行任務組織；前置、步驟、結果與限制都要有證據或缺口。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "goal",
+          "label": "任務目標",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "prerequisites",
+          "label": "前置需求",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "outcome",
+          "label": "結果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "uses_mechanic",
+      "label": "使用機制",
+      "from_categories": [
+        "item",
+        "guide"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    },
+    {
+      "id": "requires_item",
+      "label": "需要物品",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    },
+    {
+      "id": "treats",
+      "label": "處理狀態",
+      "from_categories": [
+        "item",
+        "guide"
+      ],
+      "to_categories": [
+        "status"
+      ]
+    },
+    {
+      "id": "explains",
+      "label": "說明規則",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-piton",
+      "category": "item",
+      "name": "岩釘",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Piton",
+      "source_locator": "Piton selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rope-cannon",
+      "category": "item",
+      "name": "繩索炮",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Rope_Cannon",
+      "source_locator": "Rope Cannon selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-anti-rope-cannon",
+      "category": "item",
+      "name": "反重力繩索炮",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Anti-Rope_Cannon",
+      "source_locator": "Anti-Rope Cannon selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-magic-bean",
+      "category": "item",
+      "name": "魔法豆",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Magic_Bean",
+      "source_locator": "Magic Bean selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bandages",
+      "category": "item",
+      "name": "繃帶",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bandage",
+      "source_locator": "Bandages selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-first-aid-kit",
+      "category": "item",
+      "name": "急救包",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Equipment selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-antidote",
+      "category": "item",
+      "name": "解毒劑",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Antidote",
+      "source_locator": "Antidote selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cure-all",
+      "category": "item",
+      "name": "萬靈藥",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cureall",
+      "source_locator": "Cure-All selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-heat-pack",
+      "category": "item",
+      "name": "暖暖包",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Equipment selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-portable-stove",
+      "category": "item",
+      "name": "便攜爐",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Portable_Stove",
+      "source_locator": "Portable Stove selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-lantern",
+      "category": "item",
+      "name": "提燈",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Equipment selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-backpack",
+      "category": "item",
+      "name": "背包",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Backpack",
+      "source_locator": "Backpack selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scout-effigy",
+      "category": "item",
+      "name": "童軍雕像",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Equipment selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-faerie-lantern",
+      "category": "item",
+      "name": "精靈提燈",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Faerie_Lantern",
+      "source_locator": "Faerie Lantern selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cursed-skull",
+      "category": "item",
+      "name": "詛咒骷髏",
+      "question": "用途、取得方式、操作與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cursed_Skull",
+      "source_locator": "Cursed Skull selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rope-climbing",
+      "category": "mechanic",
+      "name": "繩索攀爬",
+      "question": "如何觸發，規則與結果為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Rope_Spool",
+      "source_locator": "Rope Spool selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-inventory",
+      "category": "mechanic",
+      "name": "背包收納",
+      "question": "如何觸發，規則與結果為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/How_to_play",
+      "source_locator": "How to play selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cooking",
+      "category": "mechanic",
+      "name": "烹飪階段",
+      "question": "如何觸發，規則與結果為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Incinerated",
+      "source_locator": "Cooking selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-unconscious",
+      "category": "mechanic",
+      "name": "昏迷與死亡",
+      "question": "如何觸發，規則與結果為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Heads_up_display",
+      "source_locator": "How to play selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-hunger",
+      "category": "status",
+      "name": "飢餓",
+      "question": "如何產生，如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Heads_up_display",
+      "source_locator": "How to play selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-poison",
+      "category": "status",
+      "name": "中毒",
+      "question": "如何產生，如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Heads_up_display",
+      "source_locator": "How to play selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cold",
+      "category": "status",
+      "name": "寒冷",
+      "question": "如何產生，如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Damage",
+      "source_locator": "Stamina bar selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-weight",
+      "category": "status",
+      "name": "負重",
+      "question": "如何產生，如何解除？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Damage",
+      "source_locator": "Stamina bar selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-piton-rest",
+      "category": "guide",
+      "name": "用岩釘在岩壁休息",
+      "question": "需要什麼，如何依序操作，成功條件為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Piton",
+      "source_locator": "Piton selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-rope-route",
+      "category": "guide",
+      "name": "用繩索炮建立攀爬路線",
+      "question": "需要什麼，如何依序操作，成功條件為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Rope_Cannon",
+      "source_locator": "Rope Cannon selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-antidote",
+      "category": "guide",
+      "name": "使用解毒劑處理中毒",
+      "question": "需要什麼，如何依序操作，成功條件為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Antidote",
+      "source_locator": "Antidote selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-warmth",
+      "category": "guide",
+      "name": "用便攜爐與提燈取暖",
+      "question": "需要什麼，如何依序操作，成功條件為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Portable_Stove",
+      "source_locator": "Portable Stove selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-backpack",
+      "category": "guide",
+      "name": "整理背包與共享物品",
+      "question": "需要什麼，如何依序操作，成功條件為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/How_to_play",
+      "source_locator": "How to play selected index text",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-cooking",
+      "category": "guide",
+      "name": "烹煮食物並避免燒毀",
+      "question": "需要什麼，如何依序操作，成功條件為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Incinerated",
+      "source_locator": "Cooking selected index text",
+      "gap_reason": ""
+    }
+  ]
+}

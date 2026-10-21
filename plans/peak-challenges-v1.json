@@ -1,0 +1,1112 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-challenges-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "從準備、移動、治療、任務條件與撤離分析物品和徽章；把物品用途接到可執行的挑戰步驟。",
+    "structure": "補足既有 12 項以外的 52 個徽章；道具按實際用途與不同效果分項。六種大廳西洋棋棋子合為一組、四色莓蕉皮合為一組並保留別名；不複製網站分類。",
+    "basis_url": "https://peak.wiki.gg/wiki/Template%3ABadges",
+    "basis_sections": [
+      "完整徽章名冊與各項條件",
+      "道具效果、取得、操作及限制",
+      "已停用與大廳物品",
+      "四護符與納迪爾"
+    ],
+    "version_policy": "保存 2026-10-21 觀測的固定來源摘錄；正文以詳細道具頁優先於彙總表。沒有明確支持的數值不推算填入。",
+    "exclusions": [
+      "133 個來源項目去除別名及同效變體重複後，映射為 123 個道具條目；不代表未來版本永久完整。",
+      "昏迷基準倒數秒數仍缺可靠證據；不以重述現有規則清除缺口。",
+      "v1 關聯只在同一建庫計畫內建立；不挪動既有條目以強行串接。",
+      "停用道具作為歷史紀錄，明示不能在一般探險取得。"
+    ],
+    "questions": [
+      "徽章怎麼完成、在哪種探險計算、得到什麼？",
+      "物品從哪裡取得、怎麼操作、有哪些代價？",
+      "如何收齊四護符並從納迪爾撤離？",
+      "已收錄清單與未解欄位如何直接查 DB 核對？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "item",
+      "label": "道具",
+      "rationale": "以個別物品為粒度；用途、取得和限制分列，不照網站導覽分群。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "purpose",
+          "label": "用途",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "acquisition",
+          "label": "取得方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "use_steps",
+          "label": "使用步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "location",
+      "label": "區域",
+      "rationale": "保存關卡順序與地形變體，不把每日輪替誤認為永久版本。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "stage",
+          "label": "關卡位置",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "terrain",
+          "label": "地形",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "hazards",
+          "label": "危險",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "rotation",
+          "label": "輪替規則",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "攻略",
+      "rationale": "按可執行任務組織；前置、步驟、結果與限制都要有證據或缺口。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "goal",
+          "label": "任務目標",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "prerequisites",
+          "label": "前置需求",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "outcome",
+          "label": "結果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "achievement",
+      "label": "逐項徽章",
+      "rationale": "每個徽章保存自己的條件、操作與獎勵；不把通關進度或整體系統介紹當成個別徽章。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "condition",
+          "label": "解鎖條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "操作提示",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "reward",
+          "label": "解鎖獎勵",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "eligibility",
+          "label": "適用探險",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "uses_item",
+      "label": "使用道具",
+      "from_categories": [
+        "guide",
+        "achievement"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    },
+    {
+      "id": "applies_to",
+      "label": "適用於",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "location"
+      ]
+    },
+    {
+      "id": "earns_badge",
+      "label": "可取得徽章",
+      "from_categories": [
+        "guide",
+        "item",
+        "location"
+      ],
+      "to_categories": [
+        "achievement"
+      ]
+    },
+    {
+      "id": "requires_location",
+      "label": "所在區域",
+      "from_categories": [
+        "achievement"
+      ],
+      "to_categories": [
+        "location"
+      ]
+    },
+    {
+      "id": "enables",
+      "label": "啟用",
+      "from_categories": [
+        "item"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-badge-aeronautics",
+      "category": "achievement",
+      "name": "航空學徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Aeronautics Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-alpinist",
+      "category": "achievement",
+      "name": "高山攀登徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Alpinist Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-animal-serenading",
+      "category": "achievement",
+      "name": "動物小夜曲徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Animal Serenading Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-arborist",
+      "category": "achievement",
+      "name": "樹木攀登徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Arborist Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-astronomy",
+      "category": "achievement",
+      "name": "天文學徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Astronomy Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-balloon",
+      "category": "achievement",
+      "name": "氣球徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Balloon Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-beachcomber",
+      "category": "achievement",
+      "name": "海岸探索徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Beachcomber Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-bing-bong",
+      "category": "achievement",
+      "name": "Bing Bong徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Bing Bong Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-bundled-up",
+      "category": "achievement",
+      "name": "禦寒徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Bundled Up Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-clutch",
+      "category": "achievement",
+      "name": "關鍵救援徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Clutch Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-competitive-eating",
+      "category": "achievement",
+      "name": "競速進食徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Competitive Eating Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-cooking",
+      "category": "achievement",
+      "name": "烹飪徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Cooking Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-cool-cucumber",
+      "category": "achievement",
+      "name": "冷靜如瓜徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Cool Cucumber Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-cryptogastronomy",
+      "category": "achievement",
+      "name": "奇珍美食徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Cryptogastronomy Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-daredevil",
+      "category": "achievement",
+      "name": "膽大包天徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Daredevil Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-disaster-response",
+      "category": "achievement",
+      "name": "災難應變徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Disaster Response Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-emergency-preparedness",
+      "category": "achievement",
+      "name": "緊急應備徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Emergency Preparedness Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-endurance",
+      "category": "achievement",
+      "name": "耐力徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Endurance Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-esoterica",
+      "category": "achievement",
+      "name": "秘術徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Esoterica Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-exorcist",
+      "category": "achievement",
+      "name": "驅魔徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Exorcist Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-first-aid",
+      "category": "achievement",
+      "name": "急救徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "First Aid Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-foraging",
+      "category": "achievement",
+      "name": "採集徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Foraging Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-forestry",
+      "category": "achievement",
+      "name": "林業徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Forestry Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-gourmand",
+      "category": "achievement",
+      "name": "美食家徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Gourmand Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-happy-camper",
+      "category": "achievement",
+      "name": "快樂露營徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Happy Camper Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-hasty",
+      "category": "achievement",
+      "name": "迅速撤離徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Hasty Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-high-altitude",
+      "category": "achievement",
+      "name": "高海拔徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "High Altitude Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-jester",
+      "category": "achievement",
+      "name": "弄臣徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Jester Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-knot-tying",
+      "category": "achievement",
+      "name": "繩結徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Knot Tying Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-leave-no-trace",
+      "category": "achievement",
+      "name": "無痕登山徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Leave No Trace Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-last-resort",
+      "category": "achievement",
+      "name": "最後手段徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Last Resort Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-lone-wolf",
+      "category": "achievement",
+      "name": "獨行狼徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Lone Wolf Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-megaentomology",
+      "category": "achievement",
+      "name": "巨蟲學徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Megaentomology Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-mentorship",
+      "category": "achievement",
+      "name": "師徒會面徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Mentorship Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-mycoacrobatics",
+      "category": "achievement",
+      "name": "真菌特技徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Mycoacrobatics Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-mycology",
+      "category": "achievement",
+      "name": "真菌學徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Mycology Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-naturalist",
+      "category": "achievement",
+      "name": "自然飲食徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Last_Resort_Badge",
+      "source_locator": "Naturalist Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-needlepoint",
+      "category": "achievement",
+      "name": "滿身荊棘徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Needlepoint Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-nomad",
+      "category": "achievement",
+      "name": "遊牧徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Nomad Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-participation",
+      "category": "achievement",
+      "name": "參與徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Participation Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-peak",
+      "category": "achievement",
+      "name": "登頂徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Peak Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-plunderer",
+      "category": "achievement",
+      "name": "搜掠徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Plunderer Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-resourcefulness",
+      "category": "achievement",
+      "name": "物盡其用徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Resourcefulness Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-rule-zero",
+      "category": "achievement",
+      "name": "第零條規則徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Rule Zero Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-survivalist",
+      "category": "achievement",
+      "name": "生存專家徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Survivalist Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-toxicology",
+      "category": "achievement",
+      "name": "毒理學徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Toxicology Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-trailblazer",
+      "category": "achievement",
+      "name": "開拓者徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Trailblazer Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-tread-lightly",
+      "category": "achievement",
+      "name": "輕步前行徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Tread Lightly Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-ultimate",
+      "category": "achievement",
+      "name": "極限飛盤徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Ultimate Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-undead-encounter",
+      "category": "achievement",
+      "name": "亡者遭遇徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Undead Encounter Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-volcanology",
+      "category": "achievement",
+      "name": "火山學徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Volcanology Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badge-web-security",
+      "category": "achievement",
+      "name": "蛛網安全徽章",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Web Security Badge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-balloon",
+      "category": "item",
+      "name": "氣球",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Balloon",
+      "source_locator": "Balloon: gravity and fall damage",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-balloon-bunch",
+      "category": "item",
+      "name": "氣球束",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Balloon_Bunch",
+      "source_locator": "Balloon Bunch",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bing-bong",
+      "category": "item",
+      "name": "Bing Bong 玩偶",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bing_Bong",
+      "source_locator": "Bing Bong",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-binoculars",
+      "category": "item",
+      "name": "望遠鏡",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Binoculars",
+      "source_locator": "Binoculars",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bugle",
+      "category": "item",
+      "name": "號角",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bugle",
+      "source_locator": "Bugle",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bugle-of-friendship",
+      "category": "item",
+      "name": "友誼號角",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bugle_of_Friendship",
+      "source_locator": "Bugle of Friendship",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scoutmasters-bugle",
+      "category": "item",
+      "name": "童軍團長號角",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Scoutmaster%27s_Bugle",
+      "source_locator": "Scoutmaster's Bugle",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-checkpoint-flag",
+      "category": "item",
+      "name": "檢查點旗",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Flag",
+      "source_locator": "Checkpoint Flag",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bounce-fungus",
+      "category": "item",
+      "name": "彈跳菌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bounce_Fungus",
+      "source_locator": "Bounce Fungus",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cloud-fungus",
+      "category": "item",
+      "name": "雲朵菌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cloud_Fungus",
+      "source_locator": "Cloud Fungus",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-shelf-fungus",
+      "category": "item",
+      "name": "板狀菌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Shelf_Fungus",
+      "source_locator": "Shelf Fungus",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scout-cannon",
+      "category": "item",
+      "name": "童軍大砲",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Scout_Cannon",
+      "source_locator": "Scout Cannon",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-flying-disc",
+      "category": "item",
+      "name": "飛盤",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Flying_Disc",
+      "source_locator": "Flying Disc",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-passport",
+      "category": "item",
+      "name": "護照",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mouth",
+      "source_locator": "Passport",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cactus",
+      "category": "item",
+      "name": "小仙人掌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cactus",
+      "source_locator": "Cactus",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-anti-zooka",
+      "category": "item",
+      "name": "反重力砲",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Anti-Zooka",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-ritual-dagger",
+      "category": "item",
+      "name": "儀式匕首",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Ritual Dagger",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scouts-initiative",
+      "category": "item",
+      "name": "童軍的主動",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Initiative",
+      "source_locator": "Scout's Initiative",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scouts-tenacity",
+      "category": "item",
+      "name": "童軍的堅韌",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Tenacity",
+      "source_locator": "Scout's Tenacity",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scouts-generosity",
+      "category": "item",
+      "name": "童軍的慷慨",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Generosity",
+      "source_locator": "Scout's Generosity",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scouts-ambition",
+      "category": "item",
+      "name": "童軍的抱負",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Scout%27s_Ambition",
+      "source_locator": "Scout's Ambition",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-strange-gem",
+      "category": "item",
+      "name": "奇異寶石",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Strange_Gem",
+      "source_locator": "Strange Gem",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scouts-honor",
+      "category": "item",
+      "name": "童軍之譽",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Mystical_items",
+      "source_locator": "Scout's Honor",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-yellow-winterberry",
+      "category": "item",
+      "name": "黃色冬莓",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Yellow Winterberry food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-honeycomb",
+      "category": "item",
+      "name": "蜂巢蜜",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Honeycomb food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-medicinal-root",
+      "category": "item",
+      "name": "藥草根",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Medicinal Root food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-hot-dog",
+      "category": "item",
+      "name": "熱狗",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Hot Dog food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-egg",
+      "category": "item",
+      "name": "蛋",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_scorpion",
+      "source_locator": "Egg food properties",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cooked-bird",
+      "category": "item",
+      "name": "熟鳥",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cooked_Bird",
+      "source_locator": "Cooked Bird",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bugle-shroom",
+      "category": "item",
+      "name": "喇叭菇",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Bugle_Shroom",
+      "source_locator": "Bugle Shroom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-button-shroom",
+      "category": "item",
+      "name": "鈕扣菇",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Button_Shroom",
+      "source_locator": "Button Shroom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cluster-shroom",
+      "category": "item",
+      "name": "群生菇",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Cluster_Shroom",
+      "source_locator": "Cluster Shroom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-chubby-shroom",
+      "category": "item",
+      "name": "胖胖菇",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Chubby_Shroom",
+      "source_locator": "Chubby Shroom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-nadir",
+      "category": "location",
+      "name": "納迪爾",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/The_Lost_Souls",
+      "source_locator": "Nadir: entry and completion",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-guide-nadir",
+      "category": "guide",
+      "name": "四護符與納迪爾通關",
+      "question": "如何取得及操作、條件與限制為何？",
+      "priority": 1,
+      "source_url": "https://peak.wiki.gg/wiki/Needlepoint",
+      "source_locator": "Rule Zero Badge",
+      "gap_reason": ""
+    }
+  ]
+}

@@ -1,0 +1,731 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-core-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "以合作登山及求援為核心：管理體力和負面狀態、利用物品穿越地形、救援隊友並前進。",
+    "structure": "按玩家會問的問題分為遊戲概況、玩法配置、規則、物件、任務、故事與外部評價／更新；網站章節僅作定位。",
+    "basis_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+    "basis_sections": [
+      "Lead",
+      "Gameplay",
+      "Reception"
+    ],
+    "version_policy": "2026-10-21 頁面觀測；不是遊戲 build 驗證。版本敏感數值、關卡變動與公告須逐項引用；未知寫 gaps，不猜零值。",
+    "exclusions": [
+      "沒有證據支持固定職業／角色養成系統，暫不建立職業、技能樹。",
+      "不將評價、同人故事或 Wiki 的更新轉述標成官方事實。",
+      "不預設所有分類已有可取得資料；官方更新保留取得限制。"
+    ],
+    "questions": [
+      "這是什麼遊戲？",
+      "幾人合作？",
+      "負面狀態如何影響體力？",
+      "物品如何幫助登山？",
+      "在哪一關？",
+      "怎樣救隊友？",
+      "資訊源自哪個版本、來源和修訂？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "introduction",
+      "label": "遊戲介紹",
+      "rationale": "根條目回答遊戲是什麼；與操作機制及主觀評價分開。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "premise",
+          "label": "玩法與目標",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "developers",
+          "label": "開發團隊",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "platforms",
+          "label": "已核對平台",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "release_date",
+          "label": "首發日期",
+          "type": "date",
+          "unit": null
+        },
+        {
+          "id": "perspective",
+          "label": "視角",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "mode",
+      "label": "模式",
+      "rationale": "單人／合作、隊伍人數與難度是遊玩配置，不是角色職業。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "participation",
+          "label": "參與方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "max_players",
+          "label": "人數上限",
+          "type": "integer",
+          "unit": "人"
+        },
+        {
+          "id": "communication",
+          "label": "溝通方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "difficulty",
+          "label": "難度與解鎖",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "描述規則與因果；攻略描述實際操作順序。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "label": "狀態",
+      "rationale": "影響體力或行動的條件獨立建條目，便於查詢來源和解除方式。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "effect",
+          "label": "效果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "causes",
+          "label": "來源",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "remedies",
+          "label": "解除方式",
+          "type": "strings",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "label": "道具",
+      "rationale": "以個別物品為粒度；用途、取得和限制分列，不照網站導覽分群。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "purpose",
+          "label": "用途",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "acquisition",
+          "label": "取得方式",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "use_steps",
+          "label": "使用步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "location",
+      "label": "區域",
+      "rationale": "保存關卡順序與地形變體，不把每日輪替誤認為永久版本。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "stage",
+          "label": "關卡位置",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "terrain",
+          "label": "地形",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "hazards",
+          "label": "危險",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "rotation",
+          "label": "輪替規則",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "character",
+      "label": "角色",
+      "rationale": "玩家 Scout 身分適用；目前不假設有職業、技能樹或角色數值表。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "role",
+          "label": "角色定位",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "abilities",
+          "label": "已知能力",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "identity",
+          "label": "身分設定",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "creature",
+      "label": "生物與威脅",
+      "rationale": "非玩家威脅的行為與觸發規則，與玩家身分分開。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "behavior",
+          "label": "行為",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "trigger",
+          "label": "出現條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "counterplay",
+          "label": "應對",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "攻略",
+      "rationale": "按可執行任務組織；前置、步驟、結果與限制都要有證據或缺口。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "goal",
+          "label": "任務目標",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "prerequisites",
+          "label": "前置需求",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "steps",
+          "label": "步驟",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "outcome",
+          "label": "結果",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "constraints",
+          "label": "限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "achievement",
+      "label": "徽章與成就",
+      "rationale": "遊戲徽章、官方條件及 Steam 對應分開；無證據不假定等價。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "condition",
+          "label": "獲得條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "reward",
+          "label": "獎勵",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "steam_equivalence",
+          "label": "Steam 對應",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "lore",
+      "label": "世界觀",
+      "rationale": "保存作品明示的故事背景；不加入推測、同人或攻略當故事。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "setting",
+          "label": "背景設定",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "narrative",
+          "label": "事件敘述",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "interpretation_limits",
+          "label": "解讀限制",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "label": "評價",
+      "rationale": "觀點不是遊戲規則；二手彙整明示轉述層級，不能冒充一手評論。",
+      "allowed_source_types": [
+        "wiki",
+        "third_party_analysis"
+      ],
+      "fields": [
+        {
+          "id": "reviewer",
+          "label": "評論者／彙整者",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "stance",
+          "label": "立場",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "reasons",
+          "label": "理由",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "reviewed_at",
+          "label": "評論日期",
+          "type": "date",
+          "unit": null
+        },
+        {
+          "id": "score",
+          "label": "評分與量尺",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    },
+    {
+      "id": "update",
+      "label": "官方更新",
+      "rationale": "只接受官方來源；日期、版本與受影響條目保留歷史。",
+      "allowed_source_types": [
+        "official"
+      ],
+      "fields": [
+        {
+          "id": "announced_at",
+          "label": "公告日期",
+          "type": "date",
+          "unit": null
+        },
+        {
+          "id": "version",
+          "label": "版本／build",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "changes",
+          "label": "改動",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "scope",
+          "label": "適用範圍",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "has_mode",
+      "label": "包含模式",
+      "from_categories": [
+        "introduction"
+      ],
+      "to_categories": [
+        "mode"
+      ]
+    },
+    {
+      "id": "uses_mechanic",
+      "label": "使用機制",
+      "from_categories": [
+        "mode",
+        "item",
+        "guide"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    },
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "status",
+        "item",
+        "creature"
+      ],
+      "to_categories": [
+        "mechanic",
+        "character"
+      ]
+    },
+    {
+      "id": "requires_item",
+      "label": "需要物品",
+      "from_categories": [
+        "guide"
+      ],
+      "to_categories": [
+        "item"
+      ]
+    },
+    {
+      "id": "found_in",
+      "label": "可在此取得",
+      "from_categories": [
+        "item",
+        "creature"
+      ],
+      "to_categories": [
+        "location"
+      ]
+    },
+    {
+      "id": "describes",
+      "label": "描述",
+      "from_categories": [
+        "lore",
+        "review"
+      ],
+      "to_categories": [
+        "introduction",
+        "character"
+      ]
+    },
+    {
+      "id": "unlocks",
+      "label": "解鎖",
+      "from_categories": [
+        "achievement",
+        "mode"
+      ],
+      "to_categories": [
+        "mode",
+        "item"
+      ]
+    },
+    {
+      "id": "update_affects",
+      "label": "公告影響",
+      "from_categories": [
+        "update"
+      ],
+      "to_categories": [
+        "introduction",
+        "mode",
+        "mechanic",
+        "status",
+        "item",
+        "location",
+        "character",
+        "creature",
+        "guide",
+        "achievement",
+        "lore",
+        "review"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-overview",
+      "category": "introduction",
+      "name": "PEAK 遊戲介紹",
+      "question": "這是什麼遊戲，玩家的目標是什麼？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Lead / infobox",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-coop",
+      "category": "mode",
+      "name": "合作登山",
+      "question": "最多幾人、如何溝通？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-stamina",
+      "category": "mechanic",
+      "name": "體力與負面狀態",
+      "question": "體力容量如何受影響？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-injury",
+      "category": "status",
+      "name": "受傷",
+      "question": "受傷影響什麼，如何解除？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rope-spool",
+      "category": "item",
+      "name": "繩索卷",
+      "question": "繩索卷有什麼用途，如何取得與操作？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-shore",
+      "category": "location",
+      "name": "岸邊",
+      "question": "岸邊在行程的哪個位置？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scout",
+      "category": "character",
+      "name": "Scout 玩家角色",
+      "question": "玩家在故事裡是誰？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-scoutmaster",
+      "category": "creature",
+      "name": "Scoutmaster",
+      "question": "這種威脅何時出現，如何應對？",
+      "priority": 2,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-revive",
+      "category": "guide",
+      "name": "復活隊友",
+      "question": "如何復活隊友，需要什麼及有哪些限制？",
+      "priority": 1,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-badges",
+      "category": "achievement",
+      "name": "徽章系統",
+      "question": "徽章獎勵什麼，與 Steam 成就是否等價？",
+      "priority": 2,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-crash",
+      "category": "lore",
+      "name": "失事與求援",
+      "question": "作品明示的背景是什麼？",
+      "priority": 2,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Gameplay",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-reception",
+      "category": "review",
+      "name": "評價概況",
+      "question": "誰在評價，屬於直接評論還是二手彙整？",
+      "priority": 2,
+      "source_url": "https://en.wikipedia.org/wiki/Peak_(video_game)",
+      "source_locator": "Reception",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-official-update",
+      "category": "update",
+      "name": "官方更新公告",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://landfall.se/peak",
+      "source_locator": "待核對官方公告",
+      "gap_reason": "官方網站取得／用途權限尚未釐清；Wiki 轉述不替代官方公告。"
+    }
+  ]
+}
