@@ -1,21 +1,13 @@
 """Manual opt-in acquisition, never invokes a consumer repository."""
 import argparse
 import json
+import sqlite3
 from pathlib import Path
 
 from .http_collection import Collector, validate_manifest
 from .primitives import ContractError
 from .stage import StageLedger
-
-
-def source_from_plan(file: str, source_id: str):
-    value=json.loads(Path(file).read_text(encoding='utf-8-sig'))
-    if (not isinstance(value,dict) or value.get('format')!='ssr.source-plan.v1'
-            or not isinstance(value.get('sources'),list)):
-        raise ContractError('expected central ssr.source-plan.v1; no policy inferred from a URL')
-    matches=[s for s in value['sources'] if s.get('source_id')==source_id]
-    if len(matches)!=1: raise ContractError('source-id must resolve to one central source record')
-    return matches[0]
+from .source_plan import source_from_plan  # Existing import path remains callable.
 
 
 def main() -> None:
@@ -56,5 +48,5 @@ def main() -> None:
                 result=stage.bundle(args.snapshot_id,args.output_dir) if args.action=='bundle' else stage.stats()
         print(json.dumps(result,ensure_ascii=False,indent=2))
         if result.get('state')=='blocked_or_failed': raise SystemExit(2)
-    except (ContractError,OSError,ValueError) as exc:
+    except (ContractError,OSError,ValueError,sqlite3.Error) as exc:
         print(json.dumps({'status':'error','error':str(exc)},ensure_ascii=False)); raise SystemExit(1) from exc

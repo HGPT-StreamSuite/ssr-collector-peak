@@ -1,0 +1,78 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-creatures-v3",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "補上玩家可在 Gloom Wiki 讀到的 Raven／Tricky Ravens（先前 Crow 獨立頁 404）。",
+    "structure": "單一 creature 類別。",
+    "basis_url": "https://peak.wiki.gg/wiki/Gloom",
+    "basis_sections": [
+      "Raven Nests",
+      "Tricky Ravens"
+    ],
+    "version_policy": "2026-10-22 Gloom 頁短摘錄。",
+    "exclusions": [
+      "不以第三方攻略代替 Wiki。"
+    ],
+    "questions": [
+      "Raven 會攻擊嗎？語音竊取如何解除？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "creature",
+      "label": "生物與威脅",
+      "rationale": "非玩家威脅的行為與觸發規則。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "behavior",
+          "label": "行為",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "trigger",
+          "label": "出現條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "counterplay",
+          "label": "應對",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "creature"
+      ],
+      "to_categories": [
+        "creature"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-creature-raven",
+      "category": "creature",
+      "name": "烏鴉／刁鑽烏鴉",
+      "question": "Raven 會攻擊嗎？語音竊取如何解除？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Gloom",
+      "source_locator": "Raven Nests / Tricky Ravens",
+      "gap_reason": ""
+    }
+  ]
+}

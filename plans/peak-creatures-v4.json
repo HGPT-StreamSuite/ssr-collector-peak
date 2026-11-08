@@ -1,0 +1,78 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-creatures-v4",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "補友善 NPC 水豚（玩家 Wiki 可搜；非敵對威脅）。",
+    "structure": "單一 creature 類別。",
+    "basis_url": "https://peak.wiki.gg/wiki/Capybara",
+    "basis_sections": [
+      "Uses",
+      "Trivia"
+    ],
+    "version_policy": "2026-10-22 Capybara Wiki 短摘錄。",
+    "exclusions": [
+      "不以第三方攻略代替 Wiki。"
+    ],
+    "questions": [
+      "水豚在哪、做什麼、與徽章如何相關？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "creature",
+      "label": "生物與威脅",
+      "rationale": "含非敵對 NPC 的行為與出現條件。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "behavior",
+          "label": "行為",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "trigger",
+          "label": "出現條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "counterplay",
+          "label": "應對／用途",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "creature"
+      ],
+      "to_categories": [
+        "creature"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-creature-capybara",
+      "category": "creature",
+      "name": "水豚",
+      "question": "水豚在哪、做什麼、與徽章如何相關？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Capybara",
+      "source_locator": "Capybara",
+      "gap_reason": ""
+    }
+  ]
+}

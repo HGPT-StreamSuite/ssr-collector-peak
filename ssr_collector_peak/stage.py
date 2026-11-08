@@ -5,12 +5,14 @@ import base64
 import json
 import shutil
 import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from .primitives import ContractError, canonical, digest, private_output, utc_now
 
 APPLICATION_ID = 0x53534350
+MAX_BUNDLE_JSON_BYTES = 6_000_000
 
 
 class StageLedger:
@@ -70,8 +72,9 @@ class StageLedger:
         if row is None: raise ContractError('staged document not found')
         observation=self.db.execute('SELECT * FROM observations WHERE snapshot_id=? ORDER BY observation_id DESC LIMIT 1',(sid,)).fetchone()
         meta=json.loads(observation['metadata_json']); source=json.loads(row['config_json'])
+        captured_at=meta.get('capture_receipt',{}).get('captured_at',row['captured_at'])
         result={'snapshot_id':sid,'source_id':row['source_id'],'source':source,'metadata':meta,
-            'captured_at':row['captured_at'],'observed_at':observation['observed_at'],'raw_sha256':digest(row['raw']),'body_sha256':digest(row['body']),
+            'captured_at':captured_at,'observed_at':observation['observed_at'],'raw_sha256':digest(row['raw']),'body_sha256':digest(row['body']),
             'provenance':{'canonical_url':meta.get('canonical_url',source['url']),'source_updated_at':meta.get('source_updated_at')}}
         if include_body: result['body']=row['body']
         return result
@@ -82,6 +85,14 @@ class StageLedger:
 
     def bundle(self, sid: str, output: str | Path) -> dict[str,Any]:
         doc=self.snapshot(sid,True)
+        try:
+            captured=datetime.fromisoformat(doc['captured_at']); observed=datetime.fromisoformat(doc['observed_at'])
+            now=datetime.now(timezone.utc)
+            if (captured.tzinfo is None or observed.tzinfo is None or observed<captured
+                    or (captured-now).total_seconds()>60 or (observed-now).total_seconds()>60):
+                raise ValueError
+        except (TypeError,ValueError) as error:
+            raise ContractError('invalid capture/observation timestamps or order; staged original is preserved') from error
         row=self.db.execute('SELECT raw FROM snapshots WHERE snapshot_id=?',(sid,)).fetchone()
         metadata={k:v for k,v in doc['metadata'].items() if k!='policy'}
         metadata.setdefault('acquisition_kind','http_collection')
@@ -91,8 +102,11 @@ class StageLedger:
                         'raw_base64':base64.b64encode(row['raw']).decode('ascii'),'raw_sha256':doc['raw_sha256'],
                         'body':doc['body'],'body_sha256':doc['body_sha256'],'metadata':metadata}}
         packet['bundle_id']=digest(canonical(packet))
+        data=canonical(packet).encode('utf-8')
+        if len(data)>MAX_BUNDLE_JSON_BYTES:
+            raise ContractError('collection bundle exceeds the 6 MB JSON limit; staged original is preserved')
         root=private_output(output); root.mkdir(parents=True,exist_ok=True)
-        path=root/(packet['bundle_id']+'.collection.json'); data=canonical(packet).encode('utf-8')
+        path=root/(packet['bundle_id']+'.collection.json')
         if path.exists() and path.read_bytes()!=data: raise ContractError('bundle collision; refusing overwrite')
         if not path.exists(): path.write_bytes(data)
         return {'bundle_id':packet['bundle_id'],'path':str(path),'format':packet['format'],'source_ref':packet['source_ref'],

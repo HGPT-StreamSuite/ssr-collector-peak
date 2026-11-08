@@ -1,0 +1,184 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-hazards-v3",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "補 v1/v2 延後的 Alpine／Tropics／Mesa 環境危害（玩家 Wiki 可搜）。",
+    "structure": "單一 mechanic 類別。",
+    "basis_url": "https://peak.wiki.gg/wiki/Hazards",
+    "basis_sections": [
+      "Ice Rocks",
+      "Icicles",
+      "Flash Bulbs",
+      "Geysers",
+      "Rusty Piton",
+      "Poison Ivy",
+      "Thorny Giant Ivy",
+      "Cacti",
+      "Tumbleweeds",
+      "Tornadoes"
+    ],
+    "version_policy": "2026-10-22 Wiki Hazards 短摘錄；無數值不推算。",
+    "exclusions": [
+      "不重複 v1/v2 與 blizzard／lava／bee／antlion 等已收。",
+      "道具 peak-cactus／peak-dynamite 不改寫；本批另建危害面向。",
+      "不碰 unconscious 秒數。"
+    ],
+    "questions": [
+      "Alpine／Tropics／Mesa 其餘環境危害如何觸發？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "環境危害規則與可引用數值。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "mechanic"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-ice-rocks",
+      "category": "mechanic",
+      "name": "冰岩",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Ice Rocks",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-icicles",
+      "category": "mechanic",
+      "name": "冰柱",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Icicles",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-flash-bulbs",
+      "category": "mechanic",
+      "name": "閃光球",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Flash Bulbs",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-geysers",
+      "category": "mechanic",
+      "name": "間歇泉",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Geysers",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rusty-piton",
+      "category": "mechanic",
+      "name": "鏽蝕岩釘",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Rusty Piton",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-poison-ivy",
+      "category": "mechanic",
+      "name": "毒藤",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Poison Ivy",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-thorny-giant-ivy",
+      "category": "mechanic",
+      "name": "帶刺巨型常春藤",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Thorny Giant Ivy",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-cactus-hazard",
+      "category": "mechanic",
+      "name": "仙人掌（危害）",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Cacti",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-tumbleweed",
+      "category": "mechanic",
+      "name": "滾草",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Tumbleweeds",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-tornado",
+      "category": "mechanic",
+      "name": "龍捲風",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Tornadoes",
+      "gap_reason": ""
+    }
+  ]
+}

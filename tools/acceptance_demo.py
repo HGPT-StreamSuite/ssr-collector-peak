@@ -11,6 +11,7 @@ import http.client
 import json
 import os
 import re
+import secrets
 import shutil
 import socket
 import sqlite3
@@ -66,6 +67,19 @@ def worktree_status(repo: Path) -> str:
     result = subprocess.run(['git', 'status', '--porcelain'], cwd=repo, capture_output=True, text=True, encoding='utf-8')
     need(result.returncode == 0, '無法讀取工作樹狀態')
     return result.stdout.strip()
+
+
+def collector_version() -> dict[str, Any]:
+    branch = subprocess.run(['git', '--no-optional-locks', 'branch', '--show-current'], cwd=COLLECTOR,
+                            capture_output=True, text=True, encoding='utf-8', check=True).stdout.strip()
+    files = {}
+    for directory, names, filenames in os.walk(COLLECTOR):
+        names[:] = sorted(name for name in names if name not in {'.git', '__pycache__', '.venv', '.uv-cache'})
+        for name in sorted(filenames):
+            path = Path(directory) / name
+            files[path.relative_to(COLLECTOR).as_posix()] = file_hash(path)
+    return {'head': commit(COLLECTOR), 'branch': branch, 'dirty': bool(worktree_status(COLLECTOR)),
+            'file_manifest_sha256': digest(canonical(files))}
 
 
 def read_database(path: Path, *, stage: bool = False, formal: bool = False, query: str = '', category: str = 'all', page: int = 1, page_size: int = 12) -> dict[str, Any]:
@@ -290,7 +304,7 @@ def handler_for(run: AcceptanceRun):
             self.send_header('X-Content-Type-Options', 'nosniff')
             if attachment:
                 self.send_header('Content-Disposition', 'attachment; filename="gaps.csv"')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; object-src 'none'")
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; object-src 'none'")
             self.end_headers()
             self.wfile.write(data)
 
@@ -302,7 +316,12 @@ def handler_for(run: AcceptanceRun):
             target = urlsplit(self.path)
             try:
                 if target.path == '/':
-                    self.reply(200, (COLLECTOR / 'tools' / 'acceptance.html').read_bytes(), 'text/html; charset=utf-8')
+                    page = (COLLECTOR / 'tools' / 'acceptance.html').read_bytes()
+                    if getattr(run, 'collector_only', False):
+                        page = page.replace(b'<body>', b'<body data-collector-only="true">', 1)
+                    self.reply(200, page, 'text/html; charset=utf-8')
+                elif target.path == '/collector-lab.js':
+                    self.reply(200, (COLLECTOR / 'tools' / 'collector-lab.js').read_bytes(), 'text/javascript; charset=utf-8')
                 elif target.path in AUDIT_DOCUMENTS:
                     name, content_type = AUDIT_DOCUMENTS[target.path]
                     path = audit_document(getattr(run, 'audit_dir', None), name)
@@ -327,10 +346,44 @@ def handler_for(run: AcceptanceRun):
                 else:
                     self.reply(404, b'{"error":"not found"}')
             except (ContractError, OSError, sqlite3.Error, ValueError) as error:
-                self.reply(503, json.dumps({'error': str(error)}, ensure_ascii=False).encode('utf-8'))
+                message = str(error)
+                if getattr(run, 'collector_only', False) and not isinstance(error, ContractError):
+                    message = '合成讀取失敗；請檢查本機工作階段紀錄'
+                self.reply(503, json.dumps({'error': message}, ensure_ascii=False).encode('utf-8'))
 
         def do_POST(self) -> None:
-            self.reply(405, b'{"error":"read-only viewer"}')
+            if not getattr(run, 'collector_only', False):
+                self.reply(405, b'{"error":"read-only viewer"}')
+                return
+            host = self.headers.get('Host')
+            allowed = {'127.0.0.1:' + str(self.server.server_port), 'localhost:' + str(self.server.server_port)}
+            if (host not in allowed or self.headers.get('Origin') != 'http://' + host
+                    or not secrets.compare_digest(self.headers.get('X-Collector-Token', '').encode('utf-8'), run.token.encode('utf-8'))):
+                self.reply(403, b'{"error":"host, origin or token denied"}')
+                return
+            target = urlsplit(self.path)
+            if target.path not in {'/api/collector/intake', '/api/collector/new-session'} or target.query:
+                self.reply(404, b'{"error":"operation not found"}')
+                return
+            try:
+                length = int(self.headers.get('Content-Length', '0'))
+                need(not self.headers.get('Transfer-Encoding') and 0 < length <= 65_536, 'JSON request 大小需為 1–65,536 bytes')
+                need(self.headers.get('Content-Type', '').split(';')[0].strip().lower() == 'application/json', '需使用 application/json')
+                raw = self.rfile.read(length)
+                need(len(raw) == length, 'JSON request 不完整')
+                value = json.loads(raw.decode('utf-8'))
+                if target.path.endswith('/intake'):
+                    result = run.submit(value)
+                else:
+                    need(isinstance(value, dict) and set(value) == {'session_id'}, '需提供目前 session_id')
+                    result = run.new_session(value['session_id'])
+                self.reply(200, json.dumps(result, ensure_ascii=False).encode('utf-8'))
+            except (ContractError, ValueError, UnicodeError) as error:
+                run.record_error(str(error))
+                self.reply(400, json.dumps({'error': str(error)}, ensure_ascii=False).encode('utf-8'))
+            except (OSError, sqlite3.Error):
+                run.record_error('合成操作發生儲存錯誤；請檢查本機工作階段紀錄，先重新讀取，不要盲目重送')
+                self.reply(503, json.dumps({'error': '合成操作發生儲存錯誤；結果可能不確定，請先重新讀取'}, ensure_ascii=False).encode('utf-8'))
 
     return Handler
 
@@ -385,7 +438,9 @@ def reuse_existing(args: argparse.Namespace) -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='合成檔案交接驗收：既有環境、獨立 CLI、實際 DB 唯讀展示')
-    parser.add_argument('--knowledge-repo', type=Path, required=True)
+    parser.add_argument('--knowledge-repo', type=Path)
+    parser.add_argument('--collector-only', action='store_true', help='本 repo 的合成輸入／輸出頁，不依賴 knowledge')
+    parser.add_argument('--evidence-summary', type=Path, help='只在 collector-only 顯示安全的程式測試摘要')
     parser.add_argument('--data-dir', type=Path, required=True)
     parser.add_argument('--formal-db', default='')
     parser.add_argument('--audit-dir', type=Path, help='既有 Git checkout 外的私有 report.html 與 gaps.csv 目錄；僅供唯讀展示')
@@ -395,12 +450,22 @@ def main() -> None:
     args = parser.parse_args()
     try:
         need(1 <= args.port <= 65535, 'port 需為 1–65535')
-        if not args.check_only and reuse_existing(args):
-            return
-        run = AcceptanceRun(args.knowledge_repo, args.data_dir, Path(args.formal_db) if args.formal_db else None, audit_dir=args.audit_dir)
-        run.execute()
-        print(json.dumps({'state': 'verified_synthetic_handoff', 'run': str(run.run), 'commits': run.commits,
-                          'tests': run.tests, 'new_real_documents': 0}, ensure_ascii=False), flush=True)
+        if args.collector_only:
+            from .collector_lab import CollectorLab
+            need(not args.knowledge_repo and not args.formal_db and not args.audit_dir, 'collector-only 不接受 knowledge、正式 DB 或私人 audit 目錄')
+            run = CollectorLab(args.data_dir, evidence_summary=args.evidence_summary,
+                               version=collector_version())
+            print(json.dumps({'state': 'collector_only_configured_not_http_verified', 'run': str(run.run),
+                              'version': run.version, 'new_real_documents': 0}, ensure_ascii=False), flush=True)
+        else:
+            need(args.knowledge_repo is not None, '原有跨 repo 驗收需指定 --knowledge-repo；獨立模式請加 --collector-only')
+            need(args.evidence_summary is None, '--evidence-summary 僅供 collector-only 使用')
+            if not args.check_only and reuse_existing(args):
+                return
+            run = AcceptanceRun(args.knowledge_repo, args.data_dir, Path(args.formal_db) if args.formal_db else None, audit_dir=args.audit_dir)
+            run.execute()
+            print(json.dumps({'state': 'verified_synthetic_handoff', 'run': str(run.run), 'commits': run.commits,
+                              'tests': run.tests, 'new_real_documents': 0}, ensure_ascii=False), flush=True)
         if args.check_only:
             return
         server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_for(run))

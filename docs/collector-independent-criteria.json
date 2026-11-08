@@ -1,0 +1,49 @@
+{
+  "format": "ssr.collector-acceptance.v1",
+  "scope": "ssr-collector-peak：合成本機檔案 intake、私有 stage 與 ssr.collection.v1 輸出",
+  "common_gate": {
+    "id": "default_browser_operable",
+    "required": true,
+    "standard": "所有 repo 共通：網頁須在使用者的預設瀏覽器實際開啟、可操作且運作正常",
+    "success": "用預設瀏覽器看到本 repo 頁面，實際操作適用的輸入、輸出、錯誤與重送／返回流程，保存頁面及操作結果證據",
+    "not_substitutes": ["程式或 HTML 檔存在", "HTTP 成功", "後端、記憶體路由或前端狀態測試通過", "模擬 DOM 或未連線預覽"],
+    "status": "blocked",
+    "default_browser_opened": false,
+    "interaction_verified": false,
+    "browser_evidence": [],
+    "reason": "既有 Viewer 對 127.0.0.1 臨時測試伺服器連線遭 WinError 10013；禁止重試或繞過仍有效。本輪未啟動服務或預設瀏覽器。",
+    "verified_url": null
+  },
+  "excluded": ["真站取得與來源許可核准", "ssr-knowledge 接收、知識整理、審核及發布", "正式資料庫與跨 repo 導覽"],
+  "criteria": [
+    {"id": "input", "input": "明確標示為合成資料的 UTF-8 文字或含唯一 main 的 HTML；40–20,000 bytes，正文至少 40 字元", "expected": "以固定 synthetic-export 設定及 synthetic_fixture 身分 intake；不接受路徑、URL 或來源政策輸入", "success": "輸出 snapshot、原文與正文 SHA-256、實際正文及 ssr.collection.v1 資料包", "boundaries": "過短、過大、NUL、錯誤格式、缺少／多個 main、額外欄位均回錯誤，snapshot／observation 數量不增加"},
+    {"id": "repeat", "input": "新 request_id 重送相同內容；同 request_id 重送相同請求；同 ID 改內容", "expected": "相同內容保持一份 snapshot 並新增觀測；相同請求回傳既有結果；ID 衝突拒收", "success": "以實際 SQLite 計數、state 和 request_replayed 核對；變更內容產生新 snapshot", "boundaries": "重送不覆寫原資料包；忙碌時頁面停用提交；不自動網路重試"},
+    {"id": "readback", "input": "重新讀取目前合成工作階段、下載已生成 bundle", "expected": "每次以 mode=ro/query_only 查同一 stage；下載僅限產物 allowlist", "success": "計數、正文、hash 與保存結果一致；未知產物 404", "boundaries": "任意路徑、其他工作階段及正式 DB 不得讀取；頁面不顯示完整本機路徑或環境"},
+    {"id": "isolation", "input": "checkout 外的專用 data-dir；建立新合成工作階段", "expected": "每次使用新 UUID 目錄，保留前一工作階段及紀錄；不連線網站或其他 repo", "success": "所有寫入限專用 run；沒有 entries／review／publish；http_requests=0", "boundaries": "Git checkout 或 knowledge.sqlite3 目錄及子目錄拒絕；真實資料不作為輸入"},
+    {"id": "interaction", "input": "載入範例、輸入、提交、重送、清除／取消、返回編輯與重新讀取", "expected": "成功、錯誤、忙碌、未連線、尚未執行分開顯示；清除與返回不送出請求", "success": "結果來自實際後端；文字以 textContent 顯示；表單標籤、鍵盤焦點及窄視窗可用", "boundaries": "提交中不提供假取消；連線錯誤提示結果可能不確定並要求先重新讀取；不宣稱回滾"},
+    {"id": "transport", "input": "本機服務啟動後的瀏覽器操作、Host／Origin／token 與大小邊界", "expected": "僅 loopback Host；POST 需同來源與 session token；舊 Viewer 維持唯讀", "success": "程式路由測試與實際 HTTP／瀏覽器驗證分開記錄", "boundaries": "既有 WinError 10013 限制仍有效；本輪不重試 HTTP 連線、不換埠或執行器；HTTP 與瀏覽器驗收待處理"}
+  ],
+  "evidence_required": ["branch、HEAD、dirty 與逐檔 hash", "命令、Python 版本、合成輸入定義與實際輸出", "測試 pass／failure／error／未測明細", "每次操作的 request／result、snapshot、bundle 與新連線讀回", "程式路由測試不能冒稱 HTTP 或瀏覽器已驗證"],
+  "actual_verified": {
+    "level": "程式層及合成操作；不代表共通門檻通過",
+    "program_tests": 25,
+    "python_tests": 16,
+    "frontend_state_tests": 9,
+    "historical_work_version": {"head": "7819055e1f244e869570cee50a985ccb9998e8d1", "file_manifest_sha256": "9f7ab5ee21365b7f19cd8c106cd676b4107a809d2c341f9fcd8f26f129d6e564"},
+    "results": ["上一工作版本新增 16 項 Python 與 9 項前端狀態測試通過", "原生 collector-only check-only 通過，沒有啟動服務", "實際合成 intake／bundle：1 份 snapshot、2 次 observation；同請求重送不增觀測、同內容去重、短輸入回錯誤"],
+    "evidence_id": "ssr-collector-peak-viewer-final-20261105T183535Z-0d6c438f",
+    "browser_pass": false
+  },
+  "not_applicable": [
+    {"item": "knowledge 接收、知識整理、審核與發布", "reason": "屬 ssr-knowledge 的責任，本 repo 僅輸出文件資料包；不計為通過"},
+    {"item": "跨 repo 總頁面與導覽", "reason": "使用者明確留待後續，本輪只做本 repo 頁面；不計為通過"},
+    {"item": "用正式使用者資料或憑證操作本合成頁", "reason": "本輪只允許隔離合成資料；不是以真實資料補足驗收；不計為通過"}
+  ],
+  "unverified_blocked": [
+    {"item": "預設瀏覽器實際開啟與輸入／輸出／錯誤流程", "status": "blocked", "reason": "受既有 WinError 10013 限制；無瀏覽器開啟、操作或畫面證據；沒有已驗證網址"},
+    {"item": "實際 HTTP、鍵盤操作與窄視窗視覺驗收", "status": "unverified", "reason": "程式測試及 CSS 檢查無法替代實際預設瀏覽器操作"},
+    {"item": "可選 HTTP 核心的真站取得與目前正式內容完整度", "status": "unverified", "reason": "未在本輪執行，合成資料及假 transport 不能替代"},
+    {"item": "新版完整回歸", "status": "unverified", "reason": "舊版 48 pass／4 error 與上一工作版本 25 項證據各自保留，不改標為本次頁面驗收通過"}
+  ],
+  "known_limits": ["先前同版獨立測試為 48 pass、3 項 OS loopback 拒絕、1 項 runner 誤擋；不代表新 UI 已通過", "本頁僅接受合成資料；不提供真實來源蒐集或正式知識保存", "HTML 表格保留於原文；沒有 typed tables、多頁文件或 conditional GET／304"]
+}

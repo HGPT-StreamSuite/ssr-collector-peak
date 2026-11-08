@@ -1,0 +1,154 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-creatures-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "辨識非玩家威脅的出現條件、行為與可執行應對；與玩家 Scout 身分及可食用道具條目分開。",
+    "structure": "單一 creature 類別；Scoutmaster 已在 peak-core-v1，本批不重複。Tick／蜂巢等既有道具不改成生物，威脅行為另建生物條目。",
+    "basis_url": "https://peak.wiki.gg/wiki/Category:Enemies",
+    "basis_sections": [
+      "Category:Enemies 與主要威脅頁",
+      "Gloom／Caldera／Mesa 具名威脅",
+      "蜂群行為（Beehive 頁）"
+    ],
+    "version_policy": "保存 2026-10-22 Wiki 短摘錄；無數值不推算。跨計畫關聯本批不建立。",
+    "exclusions": [
+      "不重複 peak-scoutmaster。",
+      "不把 peak-tick／peak-beehive／peak-frog／peak-scorpion 道具改寫成生物。",
+      "不收齊全部環境危害或全部怪物。",
+      "GameRant 等第三方彙整不作為本批釘選證據。"
+    ],
+    "questions": [
+      "這是什麼威脅、在哪裡出現？",
+      "靠近後會做什麼？",
+      "如何暫停、逃離或減輕危害？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "creature",
+      "label": "生物與威脅",
+      "rationale": "非玩家威脅的行為與觸發規則，與玩家身分分開。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "behavior",
+          "label": "行為",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "trigger",
+          "label": "出現條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "counterplay",
+          "label": "應對",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "creature"
+      ],
+      "to_categories": [
+        "creature"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-creature-zombie",
+      "category": "creature",
+      "name": "殭屍",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Zombie",
+      "source_locator": "Zombie",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-spider",
+      "category": "creature",
+      "name": "蜘蛛",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Spider",
+      "source_locator": "Spider",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-beetle",
+      "category": "creature",
+      "name": "甲蟲",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Beetle",
+      "source_locator": "Beetle",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-antlion",
+      "category": "creature",
+      "name": "蟻獅",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Antlion",
+      "source_locator": "Antlion",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-condor",
+      "category": "creature",
+      "name": "禿鷹",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Condor",
+      "source_locator": "Condor",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-bee",
+      "category": "creature",
+      "name": "蜜蜂群",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Beehive",
+      "source_locator": "Bees (Beehive swarm)",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-scorpion",
+      "category": "creature",
+      "name": "蠍子（威脅）",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Scorpion",
+      "source_locator": "Scorpion",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-frog",
+      "category": "creature",
+      "name": "青蛙（威脅）",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Frog",
+      "source_locator": "Frog",
+      "gap_reason": ""
+    }
+  ]
+}

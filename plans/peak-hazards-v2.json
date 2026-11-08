@@ -1,0 +1,186 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-hazards-v2",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "補 hazards-v1 延後的 Citadel 機械陷阱、Gloom 環境列，以及 Mesa 烈日。",
+    "structure": "單一 mechanic 類別；欄位對齊 hazards-v1／survival mechanic。",
+    "basis_url": "https://peak.wiki.gg/wiki/Hazards",
+    "basis_sections": [
+      "Petrifying Stones",
+      "Giant Saw",
+      "Swinging Maces",
+      "Horizontal Spike Rollers",
+      "Vertical Spike Rollers",
+      "Luggage Trap",
+      "Crucible of Lava",
+      "Gloom Water",
+      "Wrought-Iron Fences",
+      "Blazing Sun"
+    ],
+    "version_policy": "保存 2026-10-22 Wiki Hazards 表短摘錄；無數值不推算。",
+    "exclusions": [
+      "不重複 v1 十則與既有 blizzard／lava／arrow-trap／spike-trap。",
+      "不把 creature／道具列再建危害條目。",
+      "Capybara 與 Alpine 其餘環境列延後。",
+      "不碰 peak-unconscious 秒數。"
+    ],
+    "questions": [
+      "城堡陷阱如何觸發？",
+      "Gloom／Mesa 環境效果與可引用數值？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "環境／機關危害的規則、觸發、結果與可引用數值。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "mechanic"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-petrifying-stones",
+      "category": "mechanic",
+      "name": "石化石",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Petrifying Stones",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-giant-saw",
+      "category": "mechanic",
+      "name": "巨型鋸",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Giant Saw",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-swinging-mace",
+      "category": "mechanic",
+      "name": "擺盪釘錘",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Swinging Maces",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-horizontal-spike-roller",
+      "category": "mechanic",
+      "name": "水平尖刺滾軸",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Horizontal Spike Rollers",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-vertical-spike-roller",
+      "category": "mechanic",
+      "name": "垂直尖刺滾軸",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Vertical Spike Rollers",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-luggage-trap",
+      "category": "mechanic",
+      "name": "行李陷阱",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Luggage Trap",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-crucible-of-lava",
+      "category": "mechanic",
+      "name": "熔岩坩堝",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Crucible of Lava",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-gloom-water",
+      "category": "mechanic",
+      "name": "陰鬱水域",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Gloom Water",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-wrought-iron-fence",
+      "category": "mechanic",
+      "name": "鍛鐵圍欄",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Wrought-Iron Fences",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-blazing-sun",
+      "category": "mechanic",
+      "name": "烈日（Mesa）",
+      "question": "這是什麼環境／機關危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Blazing Sun",
+      "gap_reason": ""
+    }
+  ]
+}

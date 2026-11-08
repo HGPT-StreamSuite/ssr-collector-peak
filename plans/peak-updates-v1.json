@@ -1,0 +1,178 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-updates-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "依官方公告日期與版本保存具名更新；只記錄短摘錄可支持的改動，不以 Wiki 轉述充當官方證據。",
+    "structure": "單一 update 類別；每則公告一條目。既有 peak-official-update（2.6.b）留在 peak-core-v1，本批不覆蓋。",
+    "basis_url": "https://steamcommunity.com/app/3527290/announcements/",
+    "basis_sections": [
+      "Steam Community Announcements／News 具名 patch 標題",
+      "重大／具名公告（非整份 hotfix 一次灌完）",
+      "既有 2.6.b 與 DILLYDALLY 官方短摘錄"
+    ],
+    "version_policy": "保存 2026-10-22 觀測的官方短摘錄；無短摘錄不建空條目。版本字串依公告標題（含 2.04.a 與 2.4.x 並存寫法）。",
+    "exclusions": [
+      "不宣稱收齊全部 Steam 公告或全部 hotfix。",
+      "不直接 HTTP 抓取 Steam 商店或公告全文；僅 approved_local_file 短摘錄。",
+      "Wiki／SteamPeaks／UpdateMonitor 只作盤點線索，不得填入 update 類別證據。",
+      "不覆蓋既有 peak-official-update（2.6.b）歷史修訂。"
+    ],
+    "questions": [
+      "哪次官方公告、在何日發布？",
+      "公告標示的版本／名稱是什麼？",
+      "短摘錄支持哪些改動？",
+      "適用範圍與未收錄的公告缺口？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "update",
+      "label": "官方更新",
+      "rationale": "只接受官方來源；日期、版本與改動保留歷史。",
+      "allowed_source_types": [
+        "official"
+      ],
+      "fields": [
+        {
+          "id": "announced_at",
+          "label": "公告日期",
+          "type": "date",
+          "unit": null
+        },
+        {
+          "id": "version",
+          "label": "版本／build",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "changes",
+          "label": "改動",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "scope",
+          "label": "適用範圍",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "update_affects",
+      "label": "公告影響",
+      "from_categories": [
+        "update"
+      ],
+      "to_categories": [
+        "update"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-update-2-6-a",
+      "category": "update",
+      "name": "官方更新 2.6.a：地圖池隨機化",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://store.steampowered.com/news/app/3527290/view/1845383656387667",
+      "source_locator": "Patch Notes 2.6.a",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-5-a",
+      "category": "update",
+      "name": "官方更新 2.5.a：重連與存檔修正",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://store.steampowered.com/news/app/3527290/view/1844751498232435",
+      "source_locator": "Patch 2.5.a",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-4-c",
+      "category": "update",
+      "name": "官方更新 2.4.c：Bookworm 徽章修正",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://store.steampowered.com/news/app/3527290/view/1843481262702769",
+      "source_locator": "Patch 2.4.c: Bookworm badge fix, lag fix and more",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-4-a",
+      "category": "update",
+      "name": "官方更新 2.04.a：THE KILN IS BACK",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://store.steampowered.com/news/app/3527290/view/716788653799506284",
+      "source_locator": "Patch 2.04.a THE KILN IS BACK",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-4-b",
+      "category": "update",
+      "name": "官方更新 2.4.b：畫面縮放與頭像 hotfix",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://store.steampowered.com/news/app/3527290/view/1842846814441666",
+      "source_locator": "HOTFIX 2.4.b",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-03-a",
+      "category": "update",
+      "name": "官方更新 2.03.a：Gloom／Citadel 地圖批次",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://steamcommunity.com/app/3527290/announcements/",
+      "source_locator": "Patch Notes 2.03.a",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-final-ascent",
+      "category": "update",
+      "name": "官方更新 THE FINAL ASCENT：Gloom／Citadel",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://steamcommunity.com/ogg/3527290/announcements/detail/676254354515165310",
+      "source_locator": "THE FINAL ASCENT",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-01-a",
+      "category": "update",
+      "name": "官方更新 2.01.a：青蛙冷卻",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://steamcommunity.com/ogg/3527290/announcements/detail/715661584899245076",
+      "source_locator": "PATCH 2.01.a: Frog cooldown and bug fixes",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-2-02-a",
+      "category": "update",
+      "name": "官方更新 2.02.a：護符生成修正",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://steamcommunity.com/ogg/3527290/announcements/detail/715661584899246643",
+      "source_locator": "PATCH 2.02.a",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-update-dillydally",
+      "category": "update",
+      "name": "官方更新 DILLYDALLY：荊棘昏迷死亡計時",
+      "question": "哪次官方公告影響哪些知識？",
+      "priority": 2,
+      "source_url": "https://steamcommunity.com/games/3527290/announcements/detail/520850995978175753",
+      "source_locator": "The DILLYDALLY Mini-Update (Thorns death timer)",
+      "gap_reason": ""
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-creatures-v2",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "補完 peak-creatures-v1 未收的具名威脅：附著寄生、岸邊危害與 Gloom 威脅。",
+    "structure": "單一 creature 類別。Crow 無獨立 Wiki 頁故本批不建。既有道具 peak-tick 不改寫。",
+    "basis_url": "https://peak.wiki.gg/wiki/Hazards",
+    "basis_sections": [
+      "Tick",
+      "Shore hazards",
+      "Flytrap",
+      "Big Ghost"
+    ],
+    "version_policy": "保存 2026-10-22 Wiki 短摘錄；無數值不推算。",
+    "exclusions": [
+      "Crow：wiki.gg/Crow 404，不以第三方攻略充數。",
+      "不重複 v1 已收殭屍／蜘蛛／甲蟲／蟻獅／禿鷹／蜂群／蠍／青蛙。",
+      "不把環境霧／橋／熔岩管建成生物條目。"
+    ],
+    "questions": [
+      "還有哪些常見威脅未收？",
+      "如何觸發與脫出？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "creature",
+      "label": "生物與威脅",
+      "rationale": "非玩家威脅的行為與觸發規則，與玩家身分分開。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "behavior",
+          "label": "行為",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "trigger",
+          "label": "出現條件",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "counterplay",
+          "label": "應對",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "creature"
+      ],
+      "to_categories": [
+        "creature"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-creature-tick",
+      "category": "creature",
+      "name": "壁蝨（威脅）",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Tick",
+      "source_locator": "Tick",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-jellyfish",
+      "category": "creature",
+      "name": "水母",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Shore",
+      "source_locator": "Jellyfish",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-urchin",
+      "category": "creature",
+      "name": "巨型海膽",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Shore",
+      "source_locator": "Giant Urchin",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-flytrap",
+      "category": "creature",
+      "name": "捕蠅草",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Flytrap",
+      "source_locator": "Flytrap",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-creature-big-ghost",
+      "category": "creature",
+      "name": "大幽靈",
+      "question": "這是什麼威脅、如何觸發與應對？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Big_Ghost",
+      "source_locator": "Big Ghost",
+      "gap_reason": ""
+    }
+  ]
+}

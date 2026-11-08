@@ -1,0 +1,186 @@
+{
+  "format": "ssr.game-plan.v1",
+  "plan_id": "peak-hazards-v1",
+  "game": "PEAK:3527290",
+  "analysis": {
+    "core_loop": "補環境／時限危害（非生物）：霧、陰鬱、失落魂靈、橋、熔岩管、風、雨、深水、孢子雲、尖刺陷阱。",
+    "structure": "單一 mechanic 類別；欄位對齊既有 survival／expedition mechanic。",
+    "basis_url": "https://peak.wiki.gg/wiki/Hazards",
+    "basis_sections": [
+      "Fog",
+      "Sleepy Gloom",
+      "The Lost Souls",
+      "Bridge",
+      "Lava Tube",
+      "Wind",
+      "Rain",
+      "Deep Water",
+      "Mushroom Spore Clouds",
+      "Spike Traps"
+    ],
+    "version_policy": "保存 2026-10-22 Wiki Hazards 表短摘錄；無數值不推算。",
+    "exclusions": [
+      "不重複已有 peak-blizzard／peak-lava／peak-arrow-trap／peak-belltower。",
+      "不把已收 creature（水母／蟻獅／捕蠅草等）再建危害條目。",
+      "Citadel 其餘機械陷阱與 Capybara 延後。",
+      "不碰 peak-unconscious 秒數。"
+    ],
+    "questions": [
+      "各環境危害如何觸發？",
+      "效果與可引用數值？"
+    ]
+  },
+  "categories": [
+    {
+      "id": "mechanic",
+      "label": "機制",
+      "rationale": "環境危害的規則、觸發、結果與可引用數值。",
+      "allowed_source_types": [
+        "official",
+        "wiki",
+        "third_party_analysis",
+        "player_test"
+      ],
+      "fields": [
+        {
+          "id": "rule",
+          "label": "規則",
+          "type": "string",
+          "unit": null
+        },
+        {
+          "id": "triggers",
+          "label": "觸發條件",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "consequences",
+          "label": "結果",
+          "type": "strings",
+          "unit": null
+        },
+        {
+          "id": "quantities",
+          "label": "數值與單位說明",
+          "type": "string",
+          "unit": null
+        }
+      ]
+    }
+  ],
+  "relation_types": [
+    {
+      "id": "affects",
+      "label": "影響",
+      "from_categories": [
+        "mechanic"
+      ],
+      "to_categories": [
+        "mechanic"
+      ]
+    }
+  ],
+  "targets": [
+    {
+      "entry_id": "peak-fog",
+      "category": "mechanic",
+      "name": "霧（時限）",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Fog",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-sleepy-gloom",
+      "category": "mechanic",
+      "name": "昏沉陰鬱",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Sleepy Gloom",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-lost-souls",
+      "category": "mechanic",
+      "name": "失落魂靈（時限）",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "The Lost Souls",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-bridge",
+      "category": "mechanic",
+      "name": "橋樑崩塌",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Bridge",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-lava-tube",
+      "category": "mechanic",
+      "name": "熔岩管",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Lava Tube",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-wind",
+      "category": "mechanic",
+      "name": "風（Roots）",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Wind",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-rain",
+      "category": "mechanic",
+      "name": "雨（Tropics）",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Rain",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-deep-water",
+      "category": "mechanic",
+      "name": "深水（Roots）",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Deep Water",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-mushroom-spore-cloud",
+      "category": "mechanic",
+      "name": "蘑菇孢子雲",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Mushroom Spore Clouds",
+      "gap_reason": ""
+    },
+    {
+      "entry_id": "peak-spike-trap",
+      "category": "mechanic",
+      "name": "尖刺陷阱",
+      "question": "這是什麼環境危害、如何觸發、效果與數值？",
+      "priority": 2,
+      "source_url": "https://peak.wiki.gg/wiki/Hazards",
+      "source_locator": "Spike Traps",
+      "gap_reason": ""
+    }
+  ]
+}

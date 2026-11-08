@@ -1,0 +1,73 @@
+{
+  "format": "ssr.collector-interface-inventory.v1",
+  "note": "Local interface inventory; this does not replace any upstream/downstream payload schema.",
+  "repository": "HGPT-StreamSuite/ssr-collector-peak",
+  "producer": "ssr-collector-peak/0.1.0",
+  "cli": {
+    "module": "ssr_collector_peak",
+    "commands": {
+      "intake-file": {"required": ["plan", "source-id", "file", "stage-dir", "format", "origin"], "optional": ["capture-receipt"], "writes": "private collector stage only", "network": false},
+      "bundle": {"required": ["stage-dir", "snapshot-id", "output-dir"], "writes": "data-only collection JSON; never invokes a consumer", "network": false},
+      "stats": {"required": ["stage-dir"], "writes": "may initialize an empty collector stage; not a read-only command", "network": false},
+      "http-collect": {"required": ["plan", "source-id"], "optional": ["fetch", "stage-dir"], "default": "zero-request dry run", "fetch": "optional, separately permitted HTTP path; not verified by this audit"}
+    },
+    "runtime_error": {"stdout_fields": ["status", "error"], "status": "error", "exit_code": 1},
+    "success_exit_code": 0,
+    "usage_error": {"channel": "stderr usage text", "exit_code": 2},
+    "optional_http_failure": {"state": "blocked_or_failed", "exit_code": 2}
+  },
+  "source_plan": {
+    "format": "ssr.source-plan.v1",
+    "required_consumed_root_fields": ["format", "sources"],
+    "game_if_present": "PEAK:3527290",
+    "registry_sha256_if_present": "SHA-256(canonical JSON of the entire sources array), checked before selection",
+    "legacy_minimal_plan": "format/sources-only plans remain accepted; absence of registry_sha256 is not a verified registry checksum",
+    "selected_source": "exactly one source_id; existing file/HTTP source profile; returned without normalization",
+    "review_freshness": "existing source profile requires timezone-aware policy.reviewed_at within the past 31 days; no automatic renewal",
+    "authority": "ssr-knowledge central source registry; the exported plan and its hash are not an authorization signature"
+  },
+  "collection": {
+    "format": "ssr.collection.v1",
+    "root_fields": ["format", "producer", "source_ref", "document", "bundle_id"],
+    "source_ref_fields": ["source_id", "config_sha256"],
+    "document_fields": ["url", "captured_at", "observed_at", "raw_base64", "raw_sha256", "body", "body_sha256", "metadata"],
+    "raw_bytes_min": 40,
+    "raw_bytes_max": 2000000,
+    "body_characters_min": 40,
+    "body_characters_max": 2000000,
+    "json_bytes_max": 6000000,
+    "canonical_json": "sorted keys, compact separators, UTF-8, Unicode preserved, NaN/Infinity rejected",
+    "bundle_id": "SHA-256 of canonical packet excluding bundle_id",
+    "config_sha256": "SHA-256 of the exact original source configuration; no URL/policy normalization",
+    "time": "timezone-aware capture and observation, observed_at >= captured_at, no more than 60 seconds in the future; not a page update date",
+    "oversize": "error before export directory/file creation; staged original retained; no truncation",
+    "consumer": "ssr-knowledge collection_handoff.validate_bundle / ingest_collection",
+    "does_not_contain": ["knowledge entry", "review/publication instruction", "permission grant", "ACL override", "LLM answer"]
+  },
+  "browser_receipt": {
+    "format": "ssr.browser-export.v1",
+    "methods": ["local_chrome_computer_use", "local_chrome_playwright"],
+    "export_formats": ["rendered_dom_html", "rendered_text_html"],
+    "http_status": null,
+    "binding": "exact central original_url, raw hash and observed capture time; not a signature or permission grant",
+    "reobservation": "packet captured_at matches the selected receipt; the immutable snapshot row's original capture time is retained"
+  },
+  "native_web": {
+    "entry": "tools.acceptance_demo --collector-only",
+    "get": ["/", "/collector-lab.js", "/api/state", "/artifact/{allowlisted-key}"],
+    "post": ["/api/collector/intake", "/api/collector/new-session"],
+    "intake_fields": ["request_id", "session_id", "format", "text", "synthetic"],
+    "input_utf8_bytes_max": 20000,
+    "authority": "fixed synthetic source; loopback Host, same Origin and session token; not a general user/record ACL service",
+    "execution": "handler -> intake_file -> StageLedger.bundle -> new read-only SQLite connection",
+    "browser_acceptance": "blocked; real default-browser opening/interaction evidence is required separately"
+  },
+  "module_boundaries": {
+    "source_plan": "source_from_plan validates external plan input; cli.source_from_plan remains an alias",
+    "file_intake": "trusted validated source + explicitly permitted UTF-8 file -> staged document; no network/LLM",
+    "capture_receipt": "pure observation validation",
+    "stage": "collector-only SQLite and collection exporter; no knowledge entries",
+    "http_collection": "existing pure extractors/validators plus optional transport; transport unchanged by audit",
+    "collector_lab": "fixed synthetic adapter; arbitrary paths, policies, commands and endpoints rejected"
+  }
+}

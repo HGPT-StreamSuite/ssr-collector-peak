@@ -2,11 +2,21 @@
 
 PEAK（Steam app `3527290`）的獨立本機蒐集準備工具。只處理取得紀錄、原文、正文與私有暫存；沒有知識條目、審核、發布或正式搜尋功能。`ssr-knowledge` 保管中央來源政策、正式保存與查詢。兩者各自執行，以版本化 JSON 檔交接，沒有跨 repo import、共用套件或自動呼叫。
 
-先依[遊戲知識規劃](docs/game-knowledge-planning.md)完成遊戲分析、條目／欄位／關聯與來源對應，再蒐集。自有與客製 collector 共用[接收端實際契約及合成範例](https://github.com/HGPT-StreamSuite/ssr-knowledge/blob/codex/peak-local-collection/docs/collection-contract-v1.md)，各保留 producer 身份。驗收流程固定為：**輸入查詢條件 → 直接查指定資料庫 → 顯示實際查詢結果**；規劃、擷取、文件保存、知識修訂及顯示狀態分開。
+## 規劃與擷取端說明
+
+- **可複用全流程（含 Mermaid、他遊戲檢查清單）**：[ssr-knowledge 可複用遊戲知識採集 Playbook](https://github.com/HGPT-StreamSuite/ssr-knowledge/blob/codex/peak-local-collection/docs/reusable-game-collection-playbook.md)
+- **本 repo 規劃方法論**：[遊戲知識規劃](docs/game-knowledge-planning.md)
+- **A→B 檔案交接**：[file-handoff.md](docs/file-handoff.md)；契約 SSOT 在 [collection-contract-v1.md](https://github.com/HGPT-StreamSuite/ssr-knowledge/blob/codex/peak-local-collection/docs/collection-contract-v1.md)
+
+先依規劃完成遊戲分析、條目／欄位／關聯與來源對應，再蒐集。自有與客製 collector 共用上述接收端契約，各保留 producer 身份。驗收流程固定為：**輸入查詢條件 → 直接查指定資料庫 → 顯示實際查詢結果**；規劃、擷取、文件保存、知識修訂及顯示狀態分開。
 
 ## 一鍵本機驗收
 
-PEAK 已依[遊戲分析與可執行建庫計畫](docs/peak-core-plan.md)、[攀登生存](docs/peak-survival-plan.md)、[補給與區域行程](docs/peak-expedition-plan.md)、[後半行程](docs/peak-late-game-plan.md)及[徽章與補給續批](docs/peak-completion-plan.md)實際保存。同一本機 DB 現有 **244 個待審條目、261 個修訂、984 個欄位與 145 條目前關聯**，已由新 CLI、API 與 Chrome 逐筆核對；含 64 個逐項徽章、123 個道具、11 個區域及 19 篇攻略。9 個欄位缺口已補 8 個，剩昏迷倒數基準秒數。真實查詢入口為 `http://127.0.0.1:8767/`；下方一鍵流程是合成隔離測試。
+本 repo 的獨立合成輸入／輸出頁已加入既有 Viewer：使用 `--collector-only`，無須 knowledge checkout；[驗收標準與操作方式](docs/collector-independent-acceptance.md)。此模式只在隔離目錄執行真實 intake／bundle，不操作正式資料。先前 HTTP 連線權限限制仍有效，目前未驗證可連線網址或實際瀏覽器流程。
+
+所有 repo 的共通門檻都是「使用者的預設瀏覽器實際開啟、可操作且運作正常」。本 repo 目前為 **BLOCKED／未驗證**，沒有實際瀏覽器證據；程式測試與未連線預覽不算網頁驗收通過。
+
+PEAK 已依[遊戲分析與可執行建庫計畫](docs/peak-core-plan.md)、[攀登生存](docs/peak-survival-plan.md)、[補給與區域行程](docs/peak-expedition-plan.md)、[後半行程](docs/peak-late-game-plan.md)及[徽章與補給續批](docs/peak-completion-plan.md)實際保存。條目／修訂／欄位數量以實際 DB 與 knowledge 最新 acceptance 為準（勿只信本段歷史摘要）。真實查詢入口為 `http://127.0.0.1:8767/`；下方一鍵流程是合成隔離測試。
 
 在 Windows 使用既有 ssr-knowledge checkout 的 `.venv` 和 uv；不安裝或建立環境。在本 repo 執行：
 
@@ -29,6 +39,8 @@ Start-Acceptance.cmd "C:\path\ssr-knowledge" "C:\private\peak-acceptance" "C:\pr
 `http-collect` 保留為可選架構，預設只列計畫、零網路請求，不是本次選定的取得流程。必須另有中央核可的精確來源設定及 `--fetch` 才會請求 HTTP。未知用途維持 unknown，禁止用途維持 prohibited，不自動改判。
 
 ## 本機執行
+
+公開 CLI／library／handler 的入口出口、JSON／exit code、來源與時間語意、Evidence→Record 邊界及契約測例見[接口與流程稽核](docs/interface-audit.md)；機器可讀清單為 [collector.v1.json](interfaces/collector.v1.json)。既有 `ssr.collection.v1` 不變，來源設定保持精確 hash 綁定；完整資料包輸出另受接收端原有 6 MB JSON 上限約束。
 
 Python 3.11+，只有標準函式庫。沿用電腦既有的 uv 和 Python 環境；本工作沒有建立新虛擬環境、安裝套件、服務或模型。若既有環境位於另一個資料夾，可指定 `UV_PROJECT_ENVIRONMENT`，再以 `uv --offline run --no-sync` 使用它。這只是選定本機直譯器，不是 repo 的執行依賴。
 
